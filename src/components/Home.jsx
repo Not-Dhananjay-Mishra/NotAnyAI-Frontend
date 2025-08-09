@@ -22,6 +22,7 @@ function App() {
   }, [lastJsonMessage]);
   const handleSend = () => {
     UseCurrMsg(inp)
+    UseMsg("Thinking...");
     if (!inp.trim()) return;
     sendJsonMessage({ agent: "normal", query: inp });
     Useinp("")
