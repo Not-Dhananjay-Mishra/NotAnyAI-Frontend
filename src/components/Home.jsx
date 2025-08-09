@@ -6,27 +6,36 @@ function App() {
   const token = localStorage.getItem("Authorization");
   const [inp, Useinp] = useState("")
   const [Msg, UseMsg] = useState("")
+  const [CurrMsg, UseCurrMsg] = useState("")
   const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(`wss://notanyai-backend.onrender.com/wss/chat?token=${token}`);
   useEffect(() => {
     if (lastJsonMessage?.text) {
-      const cleanedMsg = lastJsonMessage.text
-        .replace(/^"|"$/g, "") // remove surrounding quotes
-        .replace(/\\n/g, "\n") // convert \n to real newlines
-        .trim();
+    const cleanedMsg = lastJsonMessage.text
+      .replace(/^"|"$/g, "") // remove surrounding quotes
+      .replace(/\\n/g, "<br/>") // replace \n with <br/>
+      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>") 
+      .replace(/\*(.*?)\*/g, "<strong>$1</strong>") 
+      .trim();
 
       UseMsg(cleanedMsg);
     }
   }, [lastJsonMessage]);
   const handleSend = () => {
+    UseCurrMsg(inp)
     if (!inp.trim()) return;
     sendJsonMessage({ agent: "normal", query: inp });
     Useinp("")
   }
   return (
     <div className='min-h-screen flex flex-col bg-gray-900 text-white'>
-      <div className='flex-1 overflow-y-auto p-6 space-y-4 justify-center items-center'>
-        <p>{Msg}</p>
-      </div>
+    <div className='flex-1 overflow-y-auto p-6 space-y-4 justify-center items-center'>
+    {CurrMsg !== "" && <p className='text-[#1B2631] bg-[#5DADE2] p-3 rounded-xl'>{CurrMsg}</p>}
+      <p
+        style={{ whiteSpace: 'pre-wrap' }}
+        dangerouslySetInnerHTML={{ __html: "NotAnyAI : " + Msg }}
+        className='text-[#ECF0F1] bg-[#2C3E50] p-3 rounded-xl'
+      ></p>
+    </div>
       <div className='p-4 border-t border-gray-700 bg-gray-800 flex gap-2'>
         <input
           type="text"
