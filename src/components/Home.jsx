@@ -1,8 +1,48 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useState } from 'react';
+import useWebSocket from 'react-use-websocket';
 
 function App() {
+  const token = localStorage.getItem("Authorization");
+  const [inp, Useinp] = useState("")
+  const [Msg, UseMsg] = useState("")
+  const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(`wss://notanyai-backend.onrender.com/wss/chat?token=${token}`);
+  useEffect(() => {
+    if (lastJsonMessage?.text) {
+      const cleanedMsg = lastJsonMessage.text
+        .replace(/^"|"$/g, "") // remove surrounding quotes
+        .replace(/\\n/g, "\n") // convert \n to real newlines
+        .trim();
+
+      UseMsg(cleanedMsg);
+    }
+  }, [lastJsonMessage]);
+  const handleSend = () => {
+    if (!inp.trim()) return;
+    sendJsonMessage({ agent: "normal", query: inp });
+    Useinp("")
+  }
   return (
-    <div>App</div>
+    <div className='min-h-screen flex flex-col bg-gray-900 text-white'>
+      <div className='flex-1 overflow-y-auto p-6 space-y-4 justify-center items-center'>
+        <p>{Msg}</p>
+      </div>
+      <div className='p-4 border-t border-gray-700 bg-gray-800 flex gap-2'>
+        <input
+          type="text"
+          placeholder="Type your message..."
+          className="flex-1 p-3 rounded-lg bg-gray-700 border border-gray-600 focus:outline-none focus:border-blue-400"
+          value={inp}
+          onChange={(e)=>{Useinp(e.target.value)}}
+        />
+        <button
+          className="px-5 py-3 bg-blue-500 hover:bg-blue-600 rounded-lg font-semibold disabled:opacity-50"
+          onClick={handleSend}
+        >
+          Send
+        </button>
+      </div>
+    </div>
   )
 }
 

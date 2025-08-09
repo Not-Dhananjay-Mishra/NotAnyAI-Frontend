@@ -12,7 +12,7 @@ function Login() {
   const [status, setStatus] = useState("");
 
   const LoginAPI = async (formData) => {
-    const res = await fetch("http://localhost:8000/login", {
+    const res = await fetch("https://notanyai-backend.onrender.com/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
