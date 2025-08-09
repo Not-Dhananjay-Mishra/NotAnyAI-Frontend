@@ -30,11 +30,11 @@ function App() {
     <div className='min-h-screen flex flex-col bg-gray-900 text-white'>
     <div className='flex-1 overflow-y-auto p-6 space-y-4 justify-center items-center'>
     {CurrMsg !== "" && <p className='text-[#1B2631] bg-[#5DADE2] p-3 rounded-xl'>{CurrMsg}</p>}
-      <p
+      {Msg !== "" && <p
         style={{ whiteSpace: 'pre-wrap' }}
         dangerouslySetInnerHTML={{ __html: "NotAnyAI : " + Msg }}
         className='text-[#ECF0F1] bg-[#2C3E50] p-3 rounded-xl'
-      ></p>
+      ></p>}
     </div>
       <div className='p-4 border-t border-gray-700 bg-gray-800 flex gap-2'>
         <input
