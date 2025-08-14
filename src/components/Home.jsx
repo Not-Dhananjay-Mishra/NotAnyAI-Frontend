@@ -94,8 +94,8 @@ function App() {
                 </div>
               </div>
               
-              <div className="p-4 border-t border-slate-700 mb-8 flex gap-2 justify-center items-center absolute bottom-0 left-0 right-0">
-                <div className='w-screen relative left-0 z-0'><input onKeyDown={(e)=>{if (e.key=="Enter") handleSend()}} value={inp} onChange={(e)=>{Useinp(e.target.value)}} type="text" className='border border-slate-900 bg-slate-700 max-w-full w-full px-4 py-4 rounded-xl hover:border-white/40' placeholder='Enter your prompt'/></div>
+              <div className="p-4 border-t border-slate-700 mb-8 flex gap-2 justify-center items-center absolute bottom-0 left-0 right-0 z-10">
+                <div className='w-screen relative left-0 z-20'><input onKeyDown={(e)=>{if (e.key=="Enter") handleSend()}} value={inp} onChange={(e)=>{Useinp(e.target.value)}} type="text" className='border border-slate-900 bg-slate-700 max-w-full w-full px-4 py-4 rounded-xl hover:border-white/40' placeholder='Enter your prompt'/></div>
                 <div>
                   <input type="file" id="fileInput" 
                   accept="image/*" 
@@ -123,7 +123,7 @@ function App() {
                     </svg>
                   </label>
                   </div>
-                <div><button onClick={handleSend} className='relative z-10 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-4 py-3 rounded-full hover:scale-90'>→</button></div>
+                <div><button onClick={handleSend} className='relative z-20 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-4 py-3 rounded-full hover:scale-90'>→</button></div>
               </div>
             </div>
         </div>
