@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef  } from 'react'
 import { useState } from 'react';
 import useWebSocket from 'react-use-websocket';
 import susLogo from '../assets/sus.svg';
@@ -9,7 +9,11 @@ function App() {
   const [inp, Useinp] = useState("")
   const [Msg, UseMsg] = useState("")
   const [CurrMsg, UseCurrMsg] = useState("")
+  const messagesEndRef = useRef(null);
   const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(`wss://notanyai-backend.onrender.com/wss/chat?token=${token}`);
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [Msg]);
   useEffect(() => {
     if (lastJsonMessage?.text) {
     const cleanedMsg = lastJsonMessage.text
@@ -83,7 +87,7 @@ function App() {
                   </div>
                 </div>
               </div>
-              <div className='flex-1 flex-row h-[100dvh] p-4 overflow-y-auto'>
+              <div className='flex-1 p-4 overflow-y-auto'>
                 <div className='flex flex-col justify-center '>
                 {CurrMsg !== "" && <p className='border rounded-xl p-3 w-fit border-gray-700 text-sm text-white bg-gradient-to-br from-blue-500 to-blue-600 self-end'>{CurrMsg}</p>}
                   {Msg !== "" && <p
@@ -91,11 +95,16 @@ function App() {
                     dangerouslySetInnerHTML={{ __html: "AI : " + Msg }}
                     className='border rounded-xl p-3 w-fit border-gray-700 text-sm text-white bg-gray-900 m-2 '
                   ></p>}
+                  <div ref={messagesEndRef} />
                 </div>
               </div>
               
-              <div className="p-4 border-t border-slate-700 mb-8 flex gap-2 justify-center items-center absolute bottom-0 left-0 right-0 z-10">
-                <div className='w-screen relative left-0 z-20'><input onKeyDown={(e)=>{if (e.key=="Enter") handleSend()}} value={inp} onChange={(e)=>{Useinp(e.target.value)}} type="text" className='border border-slate-900 bg-slate-700 max-w-full w-full px-4 py-4 rounded-xl hover:border-white/40' placeholder='Enter your prompt'/></div>
+              <div className="p-4 border-t border-slate-700 flex flex-shrink-0 gap-2 justify-center items-center">
+                <div className='w-3/4'>
+                  <input onKeyDown={(e)=>{if (e.key=="Enter") handleSend()}} value={inp} onChange={(e)=>{Useinp(e.target.value)}} 
+                  type="text" className='border border-slate-900 bg-slate-700 max-w-full w-full px-4 py-4 rounded-xl hover:border-white/40' 
+                  placeholder='Enter your prompt'/>
+                </div>
                 <div>
                   <input type="file" id="fileInput" 
                   accept="image/*" 
@@ -123,7 +132,7 @@ function App() {
                     </svg>
                   </label>
                   </div>
-                <div><button onClick={handleSend} className='relative z-20 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-4 py-3 rounded-full hover:scale-90'>→</button></div>
+                <div><button onClick={handleSend} className=' bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-4 py-3 rounded-full hover:scale-90'>→</button></div>
               </div>
             </div>
         </div>
