@@ -47,7 +47,7 @@ function App() {
     }
   };
   return (
-      <div className='flex flex-row max-h-screen h-screen relative '>
+      <div className='flex flex-row h-[100dvh] overflow-hidden relative '>
         <div className='bg-green-700 hidden md:block  md:w-1/6 bg-gradient-to-br from-slate-800 to-slate-800'>
           <div className='bg-gradient-to-r from-blue-500/20 to-purple-500/20 p-6 rounded-b-xl flex items-center gap-3'>
             <img src={susLogo} alt="sus" height={64} width={64} />
