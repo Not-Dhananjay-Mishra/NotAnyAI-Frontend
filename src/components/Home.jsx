@@ -83,7 +83,7 @@ function App() {
                   </div>
                 </div>
               </div>
-              <div className='flex-1 p-4 overflow-y-auto'>
+              <div className='flex-1 flex-row h-[100dvh] p-4 overflow-y-auto'>
                 <div className='flex flex-col justify-center '>
                 {CurrMsg !== "" && <p className='border rounded-xl p-3 w-fit border-gray-700 text-sm text-white bg-gradient-to-br from-blue-500 to-blue-600 self-end'>{CurrMsg}</p>}
                   {Msg !== "" && <p
