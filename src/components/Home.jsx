@@ -9,7 +9,7 @@ function App() {
   const [inp, Useinp] = useState("")
   const [Msg, UseMsg] = useState("")
   const [CurrMsg, UseCurrMsg] = useState("")
-  const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(`ws://localhost:8000/wss/chat?token=${token}`);
+  const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(`wss://notanyai-backend.onrender.com/wss/chat?token=${token}`);
   useEffect(() => {
     if (lastJsonMessage?.text) {
     const cleanedMsg = lastJsonMessage.text
