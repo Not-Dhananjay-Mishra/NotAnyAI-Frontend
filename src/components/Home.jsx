@@ -5,10 +5,11 @@ import susLogo from '../assets/sus.svg';
 
 function App() {
   const token = localStorage.getItem("Authorization");
+  const [file, Usefile] = useState("")
   const [inp, Useinp] = useState("")
   const [Msg, UseMsg] = useState("")
   const [CurrMsg, UseCurrMsg] = useState("")
-  const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(`wss://notanyai-backend.onrender.com/wss/chat?token=${token}`);
+  const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(`ws://localhost:8000/wss/chat?token=${token}`);
   useEffect(() => {
     if (lastJsonMessage?.text) {
     const cleanedMsg = lastJsonMessage.text
@@ -23,15 +24,31 @@ function App() {
     }
   }, [lastJsonMessage]);
   const handleSend = () => {
-    UseCurrMsg(inp)
+    UseCurrMsg(inp);
     UseMsg("Thinking...");
+
     if (!inp.trim()) return;
-    sendJsonMessage({ agent: "normal", query: inp });
-    Useinp("")
-  }
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        console.log("e")
+        const base64Data = reader.result.split(",")[1]; // this is your base64 string
+        sendJsonMessage({ agent: "img", query: inp, img: base64Data });
+        Useinp("");
+        Usefile("");
+      };
+      reader.readAsDataURL(file);
+    } else {
+      // No image selected
+      sendJsonMessage({ agent: "normal", query: inp, img: "" });
+      Useinp("");
+      Usefile("");
+    }
+  };
   return (
       <div className='flex flex-row max-h-screen h-screen relative '>
-        <div className='bg-green-700 w-1/6 bg-gradient-to-br from-slate-800 to-slate-800'>
+        <div className='bg-green-700 hidden md:block  md:w-1/6 bg-gradient-to-br from-slate-800 to-slate-800'>
           <div className='bg-gradient-to-r from-blue-500/20 to-purple-500/20 p-6 rounded-b-xl flex items-center gap-3'>
             <img src={susLogo} alt="sus" height={64} width={64} />
             <div className='text-white hidden md:block'>
@@ -77,9 +94,36 @@ function App() {
                 </div>
               </div>
               
-              <div className="p-4 border-t border-slate-700 mb-8 flex gap-4 justify-center items-center relative">
-                <div className='w-2/3'><input onKeyDown={(e)=>{if (e.key=="Enter") handleSend()}} value={inp} onChange={(e)=>{Useinp(e.target.value)}} type="text" className='border border-slate-900 bg-slate-700 max-w-full w-full px-4 py-4 rounded-xl hover:border-white/40' placeholder='Enter your prompt'/></div>
-                <div><button onClick={handleSend} className='bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-4 py-3 rounded-xl hover:scale-105'>Send</button></div>
+              <div className="p-4 border-t border-slate-700 mb-8 flex gap-2 justify-center items-center absolute bottom-0 left-0 right-0">
+                <div className='w-screen relative left-0 z-0'><input onKeyDown={(e)=>{if (e.key=="Enter") handleSend()}} value={inp} onChange={(e)=>{Useinp(e.target.value)}} type="text" className='border border-slate-900 bg-slate-700 max-w-full w-full px-4 py-4 rounded-xl hover:border-white/40' placeholder='Enter your prompt'/></div>
+                <div>
+                  <input type="file" id="fileInput" 
+                  accept="image/*" 
+                   onChange={(e) => {
+                      if (e.target.files && e.target.files[0]) {
+                        Usefile(e.target.files[0]);
+                      }
+                    }}
+                  className="w-10 h-10 hidden items-center justify-center rounded-full hover:bg-slate-600 cursor-pointer transition-colors"/>
+                    <label
+                    htmlFor="fileInput"
+                    className="px-3 py-3 flex items-center bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 justify-center rounded-full hover:bg-slate-600 cursor-pointer transition-colors"
+                    >
+                    {/* Camera Icon */}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="2"
+                      stroke="currentColor"
+                      className="w-6 h-6  text-white"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 7h3l2-3h8l2 3h3v13H3V7z" />
+                      <circle cx="12" cy="13" r="4" />
+                    </svg>
+                  </label>
+                  </div>
+                <div><button onClick={handleSend} className='relative z-10 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-4 py-3 rounded-full hover:scale-90'>→</button></div>
               </div>
             </div>
         </div>
