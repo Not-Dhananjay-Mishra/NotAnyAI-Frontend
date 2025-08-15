@@ -5,7 +5,8 @@ import susLogo from '../assets/sus.svg';
 
 function App() {
   const token = localStorage.getItem("Authorization");
-  const [file, Usefile] = useState("")
+  const [file, Usefile] = useState(null)
+  const [lastfile, Uselastfile] = useState(null)
   const [inp, Useinp] = useState("")
   const [Msg, UseMsg] = useState("")
   const [CurrMsg, UseCurrMsg] = useState("")
@@ -34,20 +35,22 @@ function App() {
     if (!inp.trim()) return;
 
     if (file) {
+      Uselastfile(file)
       const reader = new FileReader();
       reader.onloadend = () => {
         console.log("e")
         const base64Data = reader.result.split(",")[1]; // this is your base64 string
         sendJsonMessage({ agent: "img", query: inp, img: base64Data });
         Useinp("");
-        Usefile("");
+        Usefile(null);
       };
       reader.readAsDataURL(file);
     } else {
       // No image selected
       sendJsonMessage({ agent: "normal", query: inp, img: "" });
       Useinp("");
-      Usefile("");
+      Usefile(null)
+      
     }
   };
   return (
@@ -88,9 +91,23 @@ function App() {
                 </div>
               </div>
               <div className='flex-1 p-4 overflow-y-auto'>
-                <div className='flex flex-col justify-center '>
-                {CurrMsg !== "" && <p className='border rounded-xl p-3 w-fit border-gray-700 text-sm text-white bg-gradient-to-br from-blue-500 to-blue-600 self-end'>{CurrMsg}</p>}
-                  {Msg !== "" && <p
+                <div className='flex flex-col justify-centre '>
+                    {lastfile && (
+                      <div className='self-end'>
+                        <img
+                          src={URL.createObjectURL(lastfile)}
+                          alt={lastfile.name}
+                          className="max-w-xs rounded-md mb-2"
+                        />
+                      </div>
+                    )}
+                {CurrMsg !== "" && (
+                
+                  <div className='border rounded-xl p-3 w-fit border-gray-700 text-sm text-white bg-gradient-to-br from-blue-500 to-blue-600 self-end'>
+                    {CurrMsg}
+                  </div>)}
+                  {Msg !== "" &&
+                  <p
                     style={{ whiteSpace: 'pre-wrap' }}
                     dangerouslySetInnerHTML={{ __html: "AI : " + Msg }}
                     className='border rounded-xl p-3 w-fit border-gray-700 text-sm text-white bg-gray-900 m-2 '
@@ -100,9 +117,21 @@ function App() {
               </div>
               
               <div className="p-4 border-t border-slate-700 flex flex-shrink-0 gap-2 justify-center items-center">
-                <div className='w-3/4'>
+                <div className='w-3/4  overflow-hidden '>
+                <div className='max-h-16 rounded-t-xl bg-slate-700 p-2 flex items-start justify-start'>
+                  {file && (
+                    <div className="flex items-center gap-2">
+                      <img
+                        src={URL.createObjectURL(file)}
+                        alt="preview"
+                        className="w-10 h-10 rounded-md object-cover"
+                      />
+                      <span className="text-xs text-slate-300 ">{file.name}</span>
+                    </div>
+                  )}
+                </div>
                   <input onKeyDown={(e)=>{if (e.key=="Enter") handleSend()}} value={inp} onChange={(e)=>{Useinp(e.target.value)}} 
-                  type="text" className='border border-slate-900 bg-slate-700 max-w-full w-full px-4 py-4 rounded-xl hover:border-white/40' 
+                  type="text" className='border-none bg-slate-700 max-w-full w-full p-4 rounded-b-xl hover:border-white/40 outline-none focus:outline-none' 
                   placeholder='Enter your prompt'/>
                 </div>
                 <div>
