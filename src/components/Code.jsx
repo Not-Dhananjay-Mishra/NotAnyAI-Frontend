@@ -3,11 +3,55 @@ import susLogo from '../assets/sus.svg';
 import { Sandpack } from "@codesandbox/sandpack-react";
 import useWebSocket from 'react-use-websocket';
 
+const defaultFiles = {
+  "/App.js": {
+    code: `
+        import React from 'react';
+        import Hero from './Hero.jsx';
+
+        function App() {
+        return (
+            <div className="min-h-screen bg-gray-900 text-white">
+            <Hero />
+            </div>
+        );
+        }
+
+        export default App;
+    `,
+  },
+  "/Hero.jsx": {
+    code: `
+        import React from 'react';
+
+        const Hero = () => {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-screen bg-slate-900 text-white p-4">
+            <h1 className="text-5xl md:text-6xl font-extrabold text-center mb-4 leading-tight">
+                Welcome to NotAnyAI
+            </h1>
+            <p className="text-xl md:text-2xl text-center max-w-2xl mb-8">
+                Unlock your creativity. Create stunning websites with just a prompt!
+            </p>
+            <button className="bg-white text-blue-600 px-8 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-gray-100 transform hover:scale-105 transition duration-300 ease-in-out">
+                Start Building 🚀
+            </button>
+            </div>
+        );
+        };
+
+        export default Hero;
+    `,
+  },
+};
+
+
 const Code = () => {
     const token = localStorage.getItem("Authorization");
     const [view,setView] = useState("preview")
     const [files, setFiles] = useState({});
     const [query, setQuery] = useState("");
+    const [sending, setSending] = useState(false);
     const [lastquery, setlastquery] = useState("");
     const [think, setthink] = useState([]);
     const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(`wss://notanyai-backend.onrender.com/wss/chat?token=${token}`);
@@ -32,6 +76,7 @@ const Code = () => {
     };*/
     const handleSubmit = () => {
         if (!query.trim()) return;
+        setSending(true)
         setlastquery(query)
         sendJsonMessage({ agent: "code", query: query, img: "" });
         setQuery("")
@@ -43,16 +88,17 @@ const Code = () => {
         }
         if (lastJsonMessage){
             setFiles(lastJsonMessage)
+            setSending(false)
         }
     },[lastJsonMessage])
-
+    const sandboxFiles = Object.keys(files).length ? files : defaultFiles;
 
   return (
     <div className="h-[100dvh] flex flex-col overflow-hidden bg-slate-950">
       <div className="flex gap-4 justify-start items-center bg-gradient-to-br from-slate-800 to-slate-900 text-white px-6 py-3">
         <img src={susLogo} alt="sus" height={48} width={48} />
         <div>
-          <h1 className="text-xl font-bold">AI Code Builder</h1>
+          <h1 className="text-xl font-bold">AI Website Builder</h1>
           <h2 className="text-xs">Generate websites with AI</h2>
         </div>
       </div>
@@ -80,8 +126,11 @@ const Code = () => {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Type prompt..."
+              onKeyDown={(e)=>{if (e.key=="Enter") handleSend()}}
             />
-            <button className='bg-blue-600 p-2 rounded-xl text-white hover:scale-95 hover:bg-blue-700 transition-transform duration-150' onClick={handleSubmit}>Send</button>
+            <input type="submit" className='bg-blue-600 p-2 rounded-xl text-white hover:scale-95 hover:bg-blue-700 transition-transform duration-150 w-1/6' 
+            onClick={handleSubmit}  value={sending ? "wait" : "send"} disabled={sending} >
+                </input>
           </div>
         </div>
 
@@ -95,22 +144,17 @@ const Code = () => {
                     Preview 👁️
                 </button>
             </div>
-            <div className="h-[870px]">
+            <div className="h-[770px]">
                 {view === "code" && (
                     <Sandpack
                         template="react"
                         theme={"dark"}
-                        files={Object.fromEntries(
-                            Object.entries(files).map(([name, code]) => [
-                            `/${name}`, 
-                            { code }
-                            ])
-                        )}
+                        files={sandboxFiles}
                         options={{
                             externalResources: ["https://cdn.tailwindcss.com"],
                             activeFile: "/App.jsx",
                             layout: "preview",
-                            editorHeight: 870,
+                            editorHeight: 770,
                             editorWidthPercentage: 100,
                             showTabs: true,
                             showLineNumbers: true,
@@ -131,17 +175,12 @@ const Code = () => {
                     <Sandpack
                         template="react"
                         theme={"dark"}
-                        files={Object.fromEntries(
-                            Object.entries(files).map(([name, code]) => [
-                            `/${name}`, 
-                            { code }
-                            ])
-                        )}
+                        files={sandboxFiles}
                         options={{
                             externalResources: ["https://cdn.tailwindcss.com"],
                             activeFile: "/App.jsx",
                             layout: "preview",
-                            editorHeight: 870,
+                            editorHeight: 770,
                             editorWidthPercentage: 0,
                             showTabs: true,
                             showLineNumbers: true,
