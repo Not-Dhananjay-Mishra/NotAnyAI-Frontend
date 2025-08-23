@@ -133,12 +133,23 @@ const Code = () => {
     useEffect(()=>{console.log(view)},[view])
   return (
     <div className="h-[100dvh] flex flex-col overflow-hidden bg-slate-950">
-      <div className="flex gap-4 justify-start items-center bg-gradient-to-br from-slate-800 to-slate-900 text-white px-6 py-3">
+      <div className="flex gap-4 justify-centre items-center bg-gradient-to-br from-slate-800 to-slate-900 text-white px-6 py-3">
         <img src={susLogo} alt="sus" height={48} width={48} />
-        <div>
+        <div className='flex-1'>
           <h1 className="text-xl font-bold">SiteCraft AI</h1>
           <h2 className="text-xs">Generate websites with AI</h2>
         </div>
+        <div className='flex-1 -ml-64'>
+                <button className='bg-slate-800 p-3 rounded-2xl mt-2 hover:scale-95 hover:bg-slate-700 transition-transform duration-150' onClick={() => setView("Code")}>
+                    Code 💻 
+                </button>
+                <button className='bg-slate-800 p-3 rounded-2xl mt-2 hover:scale-95 hover:bg-slate-700 transition-transform duration-150' onClick={() => setView("Preview")} >
+                    Preview ✨
+                </button>
+                <button className='bg-slate-800 p-3 rounded-2xl mt-2 hover:scale-95 hover:bg-slate-700 transition-transform duration-150' onClick={() => setView("Both")} >
+                    Both ⧉ (Editing Mode)
+                </button>
+            </div>
       </div>
 
       <div className="flex flex-row flex-1 overflow-hidden p-3">
@@ -186,7 +197,7 @@ const Code = () => {
 
         {/* Right panel */}
         <div className="flex-1 bg-slate-900 rounded-2xl ml-3 text-white">
-            <div className='flex justify-center gap-4 mb-3'>
+            {/*<div className='flex justify-center gap-4 mb-3'>
                 <button className='bg-slate-800 p-3 rounded-2xl mt-2 hover:scale-95 hover:bg-slate-700 transition-transform duration-150' onClick={() => setView("Code")}>
                     Code 💻 
                 </button>
@@ -196,8 +207,8 @@ const Code = () => {
                 <button className='bg-slate-800 p-3 rounded-2xl mt-2 hover:scale-95 hover:bg-slate-700 transition-transform duration-150' onClick={() => setView("Both")} >
                     Both ⧉ (Editing Mode)
                 </button>
-            </div>
-            <div className="h-[770px]">
+            </div>*/}
+            <div className="h-[830px]">
                 {view === "Code" && (
                     <Sandpack
                         template="react"
@@ -207,7 +218,7 @@ const Code = () => {
                             externalResources: ["https://cdn.tailwindcss.com"],
                             activeFile: "/App.jsx",
                             layout: "preview",
-                            editorHeight: 770,
+                            editorHeight: 830,
                             editorWidthPercentage: 100,
                             showTabs: true,
                             showLineNumbers: true,
@@ -233,7 +244,7 @@ const Code = () => {
                             externalResources: ["https://cdn.tailwindcss.com"],
                             activeFile: "/App.jsx",
                             layout: "preview",
-                            editorHeight: 770,
+                            editorHeight: 830,
                             editorWidthPercentage: 0,
                             showTabs: true,
                             showLineNumbers: true,
@@ -258,7 +269,7 @@ const Code = () => {
                             externalResources: ["https://cdn.tailwindcss.com"],
                             activeFile: "/App.jsx",
                             layout: "preview",
-                            editorHeight: 770,
+                            editorHeight: 830,
                             editorWidthPercentage: 50,
                             showTabs: true,
                             showLineNumbers: true,
