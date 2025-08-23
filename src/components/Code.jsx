@@ -86,6 +86,11 @@ const Code = () => {
     const [sending, setSending] = useState(false);
     const [lastquery, setlastquery] = useState("");
     const [think, setthink] = useState([]);
+
+    const [genstart, setgenstart] = useState([]);
+    const [gencomplete, setgencomplete] = useState([]);
+    const [processing, setprocessing] = useState([]);
+
     const messagesEndRef = useRef(null);
     const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(`wss://notanyai-backend.onrender.com/wss/chat?token=${token}`);
     /*const handleSubmit = async (e) => {
@@ -114,6 +119,9 @@ const Code = () => {
         sendJsonMessage({ agent: "code", query: query, img: "" });
         setQuery("")
         setthink([])
+        setgenstart([])
+        setgencomplete([])
+        setprocessing([])
         setFiles({})
         setdefaultFiles(loadingdefault)
     }
@@ -123,6 +131,15 @@ const Code = () => {
     useEffect(()=>{
         if(lastJsonMessage?.text){
             setthink((prev) => [...prev,lastJsonMessage.text])
+        }
+        else if(lastJsonMessage?.codegenstart){
+            setgenstart((prev) => [...prev,lastJsonMessage.codegenstart])
+        }
+        else if(lastJsonMessage?.codegencomplete){
+            setgencomplete((prev) => [...prev,lastJsonMessage.codegencomplete])
+        }
+        else if(lastJsonMessage?.processing){
+            setprocessing((prev) => [...prev,lastJsonMessage.processing])
         }
         else if (lastJsonMessage){
             setFiles(lastJsonMessage)
@@ -171,11 +188,38 @@ const Code = () => {
                     {lastquery}
                 </div>)}
                 {think && (<div className='flex flex-col justify-start gap-2'>
+
+                    {think.length > 0 && (<div className='border rounded-xl p-3 w-fit border-gray-700 text-sm text-white bg-gray-900'>
                     {think.map((ele,idx)=>{
                         return (
-                            <p key={idx} className='border rounded-xl p-3 w-fit border-gray-700 text-sm text-white bg-gray-900'>{ele}</p>
+                            <p key={idx} >{ele}</p>
                         )
                     })}
+                    </div>)}
+
+                    {genstart.length > 0 && (<div className='border rounded-xl p-3 w-fit border-gray-700 text-sm text-white bg-gray-900'>
+                    {genstart.map((ele,idx)=>{
+                        return (
+                            <p key={idx} >{ele}</p>
+                        )
+                    })}
+                    </div>)}
+
+                    {gencomplete.length > 0 && (<div className='border rounded-xl p-3 w-fit border-gray-700 text-sm text-white bg-gray-900'>
+                    {gencomplete.map((ele,idx)=>{
+                        return (
+                            <p key={idx} >{ele}</p>
+                        )
+                    })}
+                    </div>)}
+
+                    {processing.length > 0 && (<div className='border rounded-xl p-3 w-fit border-gray-700 text-sm text-white bg-gray-900'>
+                    {processing.map((ele,idx)=>{
+                        return (
+                            <p key={idx} >{ele}</p>
+                        )
+                    })}
+                    </div>)}
                 </div>)}
                 <div ref={messagesEndRef} />
             </div>
