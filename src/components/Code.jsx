@@ -45,10 +45,42 @@ const defaultFiles = {
   },
 };
 
+const loadingdefault = {
+    "App.js":{
+        code: `import React from 'react';
+        import Loading from './Loading.jsx';
+
+        function App({ isLoading }) {
+        return (
+            <div className="min-h-screen bg-gray-900 text-white">
+            <Loading />
+            </div>
+        );
+        }
+
+        export default App;`
+    },
+    "Loading.jsx":{
+        code:`import React from 'react';
+        const Loading = () => {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white">
+            <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-white mb-6"></div>
+            <h2 className="text-2xl font-semibold">Building your project...</h2>
+            <p className="mt-2 text-gray-400">This may take a few seconds ⏳</p>
+            </div>
+        );
+        };
+
+        export default Loading;`
+    }
+}
+
 
 const Code = () => {
     const token = localStorage.getItem("Authorization");
     const [view,setView] = useState("preview")
+    const [defaultfiles, setdefaultFiles] = useState(defaultFiles);
     const [files, setFiles] = useState({});
     const [query, setQuery] = useState("");
     const [sending, setSending] = useState(false);
@@ -81,17 +113,18 @@ const Code = () => {
         sendJsonMessage({ agent: "code", query: query, img: "" });
         setQuery("")
         setthink([])
+        setdefaultFiles(loadingdefault)
     }
     useEffect(()=>{
         if(lastJsonMessage?.text){
             setthink((prev) => [...prev,lastJsonMessage.text])
         }
-        if (lastJsonMessage){
+        else if (lastJsonMessage){
             setFiles(lastJsonMessage)
             setSending(false)
         }
     },[lastJsonMessage])
-    const sandboxFiles = Object.keys(files).length ? files : defaultFiles;
+    const sandboxFiles = Object.keys(files).length ? files : defaultfiles;
 
   return (
     <div className="h-[100dvh] flex flex-col overflow-hidden bg-slate-950">
