@@ -2,9 +2,11 @@ import React, { useEffect, useRef  } from 'react'
 import { useState } from 'react';
 import useWebSocket from 'react-use-websocket';
 import susLogo from '../assets/sus.svg';
+import { useNavigate } from "react-router-dom";
 
 function App() {
   const token = localStorage.getItem("Authorization");
+  const navigate = useNavigate();
   const [file, Usefile] = useState(null)
   const [lastfile, Uselastfile] = useState(null)
   const [inp, Useinp] = useState("")
@@ -65,9 +67,10 @@ function App() {
           </div>
           <div className='mt-5 mx-4 font-bold'>
           <button 
-            className="w-full hidden md:block bg-gradient-to-r py-3 from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25 rounded-xl transform hover:scale-[1.02] transition-all duration-200"
+            className="w-full hidden md:block bg-gradient-to-r py-3 from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25 rounded-xl 
+            transform hover:scale-[1.02] transition-all duration-200" onClick={()=>{navigate("/code")}}
           >
-            New Conversation 
+            Coding Tool 
           </button>
           <button 
             className="w-full md:hidden bg-gradient-to-r py-3 from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25 rounded-xl transform hover:scale-[1.02] transition-all duration-200"
