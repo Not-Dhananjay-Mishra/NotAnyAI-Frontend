@@ -79,7 +79,7 @@ const loadingdefault = {
 
 const Code = () => {
     const token = localStorage.getItem("Authorization");
-    const [view,setView] = useState("preview")
+    const [view,setView] = useState(0)
     const [defaultfiles, setdefaultFiles] = useState(defaultFiles);
     const [files, setFiles] = useState({});
     const [query, setQuery] = useState("");
@@ -127,7 +127,7 @@ const Code = () => {
         }
     },[lastJsonMessage])
     const sandboxFiles = Object.keys(files).length ? files : defaultfiles;
-
+    useEffect(()=>{console.log(view)},[view])
   return (
     <div className="h-[100dvh] flex flex-col overflow-hidden bg-slate-950">
       <div className="flex gap-4 justify-start items-center bg-gradient-to-br from-slate-800 to-slate-900 text-white px-6 py-3">
@@ -184,15 +184,15 @@ const Code = () => {
         {/* Right panel */}
         <div className="flex-1 bg-slate-900 rounded-2xl ml-3 text-white">
             <div className='flex justify-center gap-4 mb-3'>
-                <button className='bg-slate-800 p-3 rounded-2xl mt-2 hover:scale-95 hover:bg-slate-700 transition-transform duration-150' onClick={() => setView("code")}>
+                <button className='bg-slate-800 p-3 rounded-2xl mt-2 hover:scale-95 hover:bg-slate-700 transition-transform duration-150' onClick={() => setView(100)}>
                     Code {"</>"} 
                 </button>
-                <button className='bg-slate-800 p-3 rounded-2xl mt-2 hover:scale-95 hover:bg-slate-700 transition-transform duration-150' onClick={() => setView("preview")} >
+                <button className='bg-slate-800 p-3 rounded-2xl mt-2 hover:scale-95 hover:bg-slate-700 transition-transform duration-150' onClick={() => setView(0)} >
                     Preview 👁️
                 </button>
             </div>
             <div className="h-[770px]">
-                {view === "code" && (
+                {/*{view === 0 && (
                     <Sandpack
                         template="react"
                         theme={"dark"}
@@ -218,7 +218,7 @@ const Code = () => {
                         }}
                     />
                 )}
-                {view === "preview" && (
+                {view === 100 && (
                     <Sandpack
                         template="react"
                         theme={"dark"}
@@ -243,7 +243,31 @@ const Code = () => {
                             },
                         }}
                     />
-                )}
+                )}*/}
+                    <Sandpack
+                        template="react"
+                        theme={"dark"}
+                        files={sandboxFiles}
+                        options={{
+                            externalResources: ["https://cdn.tailwindcss.com"],
+                            activeFile: "/App.jsx",
+                            layout: "preview",
+                            editorHeight: 770,
+                            editorWidthPercentage: 50,
+                            showTabs: true,
+                            showLineNumbers: true,
+                            showConsole: false,
+                        }}
+                        customSetup={{
+                            dependencies: {
+                            react: "^18.2.0",
+                            "react-dom": "^18.2.0",
+                            tailwindcss: "^3.4.1",
+                            postcss: "^8.4.21",
+                            autoprefixer: "^10.4.13",
+                            },
+                        }}
+                    />
             </div>
         </div>
       </div>
