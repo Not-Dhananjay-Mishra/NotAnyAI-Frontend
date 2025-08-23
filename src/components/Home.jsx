@@ -13,7 +13,40 @@ function App() {
   const [Msg, UseMsg] = useState("")
   const [CurrMsg, UseCurrMsg] = useState("")
   const messagesEndRef = useRef(null);
+  const [username, Useusername] = useState("")
   const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(`wss://notanyai-backend.onrender.com/wss/chat?token=${token}`);
+  const GetUser = async () => {
+    const token = localStorage.getItem("Authorization");
+    if (!token) return { status: "fail" };
+
+    try {
+      const res = await fetch("https://notanyai-backend.onrender.com/validate", {
+        headers: {
+          "Authorization": `${token}`,
+          "Content-Type": "application/json"
+        }
+      });
+
+      const json = await res.json();
+      return json;
+    } catch (err) {
+      console.error("Validation failed", err);
+      return { status: "fail" };
+    }
+  };
+  useEffect(() => {
+    const fetchUser = async () => {
+      const data = await GetUser();
+      console.log(data.status);
+      if (data.status === "done") {
+        Useusername(data.username);
+      } else {
+        navigate("/login"); // <-- send() isn't defined, I assume you meant navigate
+      }
+    };
+
+    fetchUser();
+  }, []);
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [Msg]);
@@ -70,7 +103,7 @@ function App() {
             className="w-full hidden md:block bg-gradient-to-r py-3 from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25 rounded-xl 
             transform hover:scale-[1.02] transition-all duration-200" onClick={()=>{navigate("/code")}}
           >
-            Coding Tool 
+            SiteCraft AI
           </button>
           <button 
             className="w-full md:hidden bg-gradient-to-r py-3 from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25 rounded-xl transform hover:scale-[1.02] transition-all duration-200"
@@ -95,6 +128,29 @@ function App() {
               </div>
               <div className='flex-1 p-4 overflow-y-auto'>
                 <div className='flex flex-col justify-centre '>
+                    {CurrMsg === "" && Msg === "" && (
+                      <div className='flex flex-col justify-center items-center text-center mt-32'>
+                        <h1 className='text-4xl md:text-6xl font-bold mb-1'>Welcome Back!</h1>
+                        <h1 className="text-xl md:text-3xl text-blue-400 mb-2">{username} <span className="text-xl text-white">ready to explore AI today?</span></h1>
+                        <h2 className="text-xl font-bold text-white mb-10">✨ Latest Feature Added</h2>
+                        <div className="flex flex-col md:flex-row gap-6 justify-center items-stretch max-w-4xl">
+                          <div className="flex-1 bg-gradient-to-r p-5 from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl shadow-lg transition-transform transform hover:scale-105">
+                            <h1 className="text-xl md:text-2xl font-bold text-white mb-2">Image-to-Text AI</h1>
+                            <p className="text-white/80 text-sm md:text-base">
+                              Upload images and get intelligent responses from the AI based on the content! 📸🤖
+                            </p>
+                          </div>
+
+                          <div className="flex-1 bg-gradient-to-r p-5 from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl shadow-lg transition-transform transform hover:scale-105">
+                            <h1 className="text-xl md:text-2xl font-bold text-white mb-2">SiteCraft AI</h1>
+                            <p className="text-white/80 text-sm md:text-base">
+                              Generate fully functional websites in seconds using AI just describe what you need! 🌐✨
+                            </p>
+                          </div>
+                        </div>
+
+                      </div>
+                    )}
                     {lastfile && (
                       <div className='self-end'>
                         <img

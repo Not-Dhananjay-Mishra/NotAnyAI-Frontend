@@ -113,6 +113,7 @@ const Code = () => {
         sendJsonMessage({ agent: "code", query: query, img: "" });
         setQuery("")
         setthink([])
+        setFiles({})
         setdefaultFiles(loadingdefault)
     }
     useEffect(()=>{
@@ -159,7 +160,7 @@ const Code = () => {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Type prompt..."
-              onKeyDown={(e)=>{if (e.key=="Enter") handleSend()}}
+              onKeyDown={(e)=>{if (e.key=="Enter") handleSubmit()}}
             />
             <input type="submit" className='bg-blue-600 p-2 rounded-xl text-white hover:scale-95 hover:bg-blue-700 transition-transform duration-150 w-1/6' 
             onClick={handleSubmit}  value={sending ? "wait" : "send"} disabled={sending} >
