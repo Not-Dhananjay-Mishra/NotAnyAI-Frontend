@@ -79,7 +79,7 @@ const loadingdefault = {
 
 const Code = () => {
     const token = localStorage.getItem("Authorization");
-    const [view,setView] = useState(0)
+    const [view,setView] = useState("Preview")
     const [defaultfiles, setdefaultFiles] = useState(defaultFiles);
     const [files, setFiles] = useState({});
     const [query, setQuery] = useState("");
@@ -187,15 +187,18 @@ const Code = () => {
         {/* Right panel */}
         <div className="flex-1 bg-slate-900 rounded-2xl ml-3 text-white">
             <div className='flex justify-center gap-4 mb-3'>
-                <button className='bg-slate-800 p-3 rounded-2xl mt-2 hover:scale-95 hover:bg-slate-700 transition-transform duration-150' onClick={() => setView(100)}>
-                    Code {"</>"} 
+                <button className='bg-slate-800 p-3 rounded-2xl mt-2 hover:scale-95 hover:bg-slate-700 transition-transform duration-150' onClick={() => setView("Code")}>
+                    Code 💻 
                 </button>
-                <button className='bg-slate-800 p-3 rounded-2xl mt-2 hover:scale-95 hover:bg-slate-700 transition-transform duration-150' onClick={() => setView(0)} >
-                    Preview 👁️
+                <button className='bg-slate-800 p-3 rounded-2xl mt-2 hover:scale-95 hover:bg-slate-700 transition-transform duration-150' onClick={() => setView("Preview")} >
+                    Preview ✨
+                </button>
+                <button className='bg-slate-800 p-3 rounded-2xl mt-2 hover:scale-95 hover:bg-slate-700 transition-transform duration-150' onClick={() => setView("Both")} >
+                    Both ⧉ (Editing Mode)
                 </button>
             </div>
             <div className="h-[770px]">
-                {/*{view === 0 && (
+                {view === "Code" && (
                     <Sandpack
                         template="react"
                         theme={"dark"}
@@ -221,7 +224,7 @@ const Code = () => {
                         }}
                     />
                 )}
-                {view === 100 && (
+                {view === "Preview" && (
                     <Sandpack
                         template="react"
                         theme={"dark"}
@@ -246,8 +249,8 @@ const Code = () => {
                             },
                         }}
                     />
-                )}*/}
-                    <Sandpack
+                )}
+                    {view === "Both" && (<Sandpack
                         template="react"
                         theme={"dark"}
                         files={sandboxFiles}
@@ -270,7 +273,7 @@ const Code = () => {
                             autoprefixer: "^10.4.13",
                             },
                         }}
-                    />
+                    />)}
             </div>
         </div>
       </div>
