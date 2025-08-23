@@ -117,6 +117,9 @@ const Code = () => {
         setFiles({})
         setdefaultFiles(loadingdefault)
     }
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [think]);
     useEffect(()=>{
         if(lastJsonMessage?.text){
             setthink((prev) => [...prev,lastJsonMessage.text])
