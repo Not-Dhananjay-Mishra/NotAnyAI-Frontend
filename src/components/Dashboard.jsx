@@ -1,9 +1,41 @@
-import React from "react";
+import React, { useEffect, useRef  , useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import { Logo } from "./Logo";
 
 function Hero() {
   const send = useNavigate()
+  const GetUser = async () => {
+    const token = localStorage.getItem("Authorization");
+    if (!token) return { status: "fail" };
+
+    try {
+      const res = await fetch("https://notanyai-backend.onrender.com/validate", {
+        headers: {
+          "Authorization": `${token}`,
+          "Content-Type": "application/json"
+        }
+      });
+
+      const json = await res.json();
+      return json;
+    } catch (err) {
+      console.error("Validation failed", err);
+      return { status: "fail" };
+    }
+  };
+  const HandleGetstarted = () => {
+    const fetchUser = async () => {
+      const data = await GetUser();
+      console.log(data.status);
+      if (data.status === "done") {
+        send("/app")
+      } else {
+        send("/login")
+      }
+    };
+
+    fetchUser();
+  }
   return (
     <div className="min-h-screen flex flex-col items-center bg-gradient-to-b from-blue-50  to-blue-200 text-white text-center px-4 relative">
       <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 backdrop-blur-sm border border-blue-200/30 rounded-full px-6 py-2 mb-8 mt-12 hover:scale-110 transition-all duration-300 hover:shadow-xl shadow-md">
@@ -18,7 +50,7 @@ function Hero() {
       <p className="text-xl md:text-3xl text-gray-700 font-light">and creative ideas. Powered by modern AI technology.</p>
       <p className="text-lg md:text-xl text-gray-600 leading-relaxed font-light mt-2">Powered by intelligence that actually understands you and your vision.</p>
       <div className="flex gap-4 mt-10">
-        <button onClick={()=>send("/login")} className="bg-gradient-to-r from-blue-500 to-purple-600 px-4 py-3 rounded-lg font-semibold text-lg hover:shadow-lg hover:scale-105 transition-all duration-300">
+        <button onClick={()=>HandleGetstarted()} className="bg-gradient-to-r from-blue-500 to-purple-600 px-4 py-3 rounded-lg font-semibold text-lg hover:shadow-lg hover:scale-105 transition-all duration-300">
           Get Started
           </button>
       </div>

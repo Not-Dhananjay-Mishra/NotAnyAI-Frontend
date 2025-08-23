@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Logo } from "./Logo";
 import susLogo from '../assets/sus.svg';
@@ -6,7 +6,6 @@ import susLogo from '../assets/sus.svg';
 
 function Login() {
   const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
     username: "",
     password: ""
