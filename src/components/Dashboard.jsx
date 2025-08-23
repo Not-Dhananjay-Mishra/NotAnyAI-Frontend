@@ -53,6 +53,9 @@ function Hero() {
         <button onClick={()=>HandleGetstarted()} className="bg-gradient-to-r from-blue-500 to-purple-600 px-4 py-3 rounded-lg font-semibold text-lg hover:shadow-lg hover:scale-105 transition-all duration-300">
           Get Started
           </button>
+        <button onClick={()=>send("/login")} className="bg-gradient-to-r from-blue-500 to-purple-600 px-4 py-3 rounded-lg font-semibold text-lg hover:shadow-lg hover:scale-105 transition-all duration-300">
+          Login
+          </button>
       </div>
       <p className="text-gray-500 mt-4">
           Shh… it's still in beta. Limited access for now.
