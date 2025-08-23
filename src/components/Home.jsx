@@ -146,6 +146,7 @@ function App() {
                             <p className="text-white/80 text-sm md:text-base">
                               Generate fully functional websites in seconds using AI just describe what you need! 🌐✨
                             </p>
+                            <p className="text-white/80 text-sm md:text-base font-bold">(Desktop Only)</p>
                           </div>
                         </div>
 
