@@ -1,7 +1,12 @@
-import React, { useEffect, useState, useRef } from 'react'
-import susLogo from '../assets/sus.svg';
-import { Sandpack } from "@codesandbox/sandpack-react";
-import useWebSocket from 'react-use-websocket';
+import React, { useEffect, useState, useRef } from "react";
+import susLogo from "../assets/sus.svg";
+import {
+  SandpackProvider,
+  SandpackLayout,
+  SandpackCodeEditor,
+  SandpackPreview,
+} from "@codesandbox/sandpack-react";
+import useWebSocket from "react-use-websocket";
 
 const defaultFiles = {
   "/App.js": {
@@ -156,15 +161,12 @@ const Code = () => {
           <h1 className="text-xl font-bold">SiteCraft AI</h1>
           <h2 className="text-xs">Generate websites with AI</h2>
         </div>
-        <div className='flex-1 -ml-64'>
+        <div className='flex-1 -ml-32'>
                 <button className='bg-slate-800 p-3 rounded-2xl mt-2 hover:scale-95 hover:bg-slate-700 transition-transform duration-150' onClick={() => setView("Code")}>
                     Code 💻 
                 </button>
                 <button className='bg-slate-800 p-3 rounded-2xl mt-2 hover:scale-95 hover:bg-slate-700 transition-transform duration-150' onClick={() => setView("Preview")} >
                     Preview ✨
-                </button>
-                <button className='bg-slate-800 p-3 rounded-2xl mt-2 hover:scale-95 hover:bg-slate-700 transition-transform duration-150' onClick={() => setView("Both")} >
-                    Both ⧉ (Editing Mode)
                 </button>
             </div>
       </div>
@@ -225,6 +227,7 @@ const Code = () => {
             </div>
           </div>
           <div className="mt-2 flex gap-2">
+            
             <input
               className="w-full p-2 rounded-lg bg-slate-800 text-white outline-none"
               type="text"
@@ -240,7 +243,7 @@ const Code = () => {
         </div>
 
         {/* Right panel */}
-        <div className="flex-1 bg-slate-900 rounded-2xl ml-3 text-white">
+        <div className="w-4/5 bg-slate-900 rounded-2xl ml-3 text-white max-w-4/5">
             {/*<div className='flex justify-center gap-4 mb-3'>
                 <button className='bg-slate-800 p-3 rounded-2xl mt-2 hover:scale-95 hover:bg-slate-700 transition-transform duration-150' onClick={() => setView("Code")}>
                     Code 💻 
@@ -252,84 +255,39 @@ const Code = () => {
                     Both ⧉ (Editing Mode)
                 </button>
             </div>*/}
-            <div className="h-[830px]">
-                {view === "Code" && (
-                    <Sandpack
-                        template="react"
-                        theme={"dark"}
-                        files={sandboxFiles}
-                        options={{
-                            externalResources: ["https://cdn.tailwindcss.com"],
-                            activeFile: "/App.jsx",
-                            layout: "preview",
-                            editorHeight: 830,
-                            editorWidthPercentage: 100,
-                            showTabs: true,
-                            showLineNumbers: true,
-                            showConsole: false,
-                        }}
-                        customSetup={{
-                            dependencies: {
-                            react: "^18.2.0",
-                            "react-dom": "^18.2.0",
-                            tailwindcss: "^3.4.1",
-                            postcss: "^8.4.21",
-                            autoprefixer: "^10.4.13",
-                            },
-                        }}
-                    />
-                )}
-                {view === "Preview" && (
-                    <Sandpack
-                        template="react"
-                        theme={"dark"}
-                        files={sandboxFiles}
-                        options={{
-                            externalResources: ["https://cdn.tailwindcss.com"],
-                            activeFile: "/App.jsx",
-                            layout: "preview",
-                            editorHeight: 830,
-                            editorWidthPercentage: 0,
-                            showTabs: true,
-                            showLineNumbers: true,
-                            showConsole: false,
-                        }}
-                        customSetup={{
-                            dependencies: {
-                            react: "^18.2.0",
-                            "react-dom": "^18.2.0",
-                            tailwindcss: "^3.4.1",
-                            postcss: "^8.4.21",
-                            autoprefixer: "^10.4.13",
-                            },
-                        }}
-                    />
-                )}
-                    {view === "Both" && (<Sandpack
-                        template="react"
-                        theme={"dark"}
-                        files={sandboxFiles}
-                        options={{
-                            externalResources: ["https://cdn.tailwindcss.com"],
-                            activeFile: "/App.jsx",
-                            layout: "preview",
-                            editorHeight: 830,
-                            editorWidthPercentage: 50,
-                            showTabs: true,
-                            showLineNumbers: true,
-                            showConsole: false,
-                        }}
-                        customSetup={{
-                            dependencies: {
-                            react: "^18.2.0",
-                            "react-dom": "^18.2.0",
-                            tailwindcss: "^3.4.1",
-                            postcss: "^8.4.21",
-                            autoprefixer: "^10.4.13",
-                            },
-                        }}
-                    />)}
-            </div>
+               <div className="flex-1 bg-slate-900 rounded-2xl m-3 overflow-hidden h-[830px]">
+                    <SandpackProvider 
+                    template="react"
+                    theme="dark"
+                    files={sandboxFiles}
+                    customSetup={{
+                        dependencies: {
+                        react: "^18.2.0",
+                        "react-dom": "^18.2.0",
+                        tailwindcss: "^3.4.1",
+                        postcss: "^8.4.21",
+                        autoprefixer: "^10.4.13",
+                        "@react-three/fiber": "^8.15.16",
+                        "@react-three/drei": "^9.101.3",
+                        },
+                    }}
+                    options={{
+                        externalResources: ["https://cdn.tailwindcss.com"],
+                        editorHeight: 830,
+                        autorun: true,
+                        recompileMode: "immediate",
+                        recompileDelay: 0,  
+                    }}
+                    >
+                    <SandpackLayout>
+                        {view === "Code" && (
+                        <SandpackCodeEditor showTabs wrapContent closableTabs autorun style={{ height: "830px" }} />
+                        )}
+
+                        {view === "Preview" && <SandpackPreview style={{ height: "830px" }} autorun/>}
+                    </SandpackLayout>
+                    </SandpackProvider>
+                </div>   
         </div>
       </div>
     </div>

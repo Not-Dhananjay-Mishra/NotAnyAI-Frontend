@@ -1,86 +1,164 @@
 import React, { useState } from "react";
-import { Sandpack } from "@codesandbox/sandpack-react";
 
-const Test = () => {
-  const [query, setQuery] = useState("");
- const [files, setFiles] = useState({});
+export default function Test() {
+  // Separate states for SendToDB
+  const [embeddingPayload, setEmbeddingPayload] = useState("");
+  const [payloadSend, setPayloadSend] = useState("");
+  const [collectionSend, setCollectionSend] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // Separate states for Lookup
+  const [payloadLookup, setPayloadLookup] = useState("");
+  const [collectionLookup, setCollectionLookup] = useState("");
+
+  const [response, setResponse] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  // Reusable request function
+  const sendRequest = async (endpoint, body) => {
+    setLoading(true);
+    setError("");
+    setResponse(null);
+
     try {
-      const res = await fetch("http://localhost:8000/api/code", {
+      const res = await fetch(`http://localhost:8000/api/rag/${endpoint}`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ query }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
       });
-      const data = await res.json();
-      if (data) {
-        setFiles(data);
+
+      if (!res.ok) {
+        throw new Error(`Error ${res.status}: ${res.statusText}`);
       }
-    } catch (error) {
-      console.error("Error fetching code:", error);
+
+      const data = await res.json();
+      setResponse(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
-  return (
-    <div className="p-6 max-w-7xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Testing -  Frontend Code maker</h1>
+  const handleSendToDb = (e) => {
+    e.preventDefault();
+    sendRequest("sendtodb", {
+      EmbeddingPayload: embeddingPayload,
+      payload: payloadSend,
+      collection: collectionSend,
+    });
+  };
 
-      {/* Input form */}
-      <form onSubmit={handleSubmit} className="flex gap-2 mb-6">
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Enter your prompt..."
-          className="border p-2 flex-1 rounded-lg"
-        />
+  const handleLookup = (e) => {
+    e.preventDefault();
+    sendRequest("lookup", {
+      payload: payloadLookup,
+      collection: collectionLookup,
+    });
+  };
+
+  return (
+    <div className="min-h-screen flex flex-row items-start justify-center bg-gray-100 p-6 space-x-8">
+      {/* Send to DB form */}
+      <form
+        onSubmit={handleSendToDb}
+        className="bg-white shadow-lg rounded-2xl p-6 w-full max-w-md space-y-4"
+      >
+        <h2 className="text-xl font-semibold">📤 Send to DB</h2>
+
+        <div>
+          <label className="block text-gray-700 mb-2">Embedding Payload</label>
+          <textarea
+            value={embeddingPayload}
+            onChange={(e) => setEmbeddingPayload(e.target.value)}
+            className="w-full border rounded-lg p-2"
+            rows="2"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block text-gray-700 mb-2">Payload</label>
+          <textarea
+            value={payloadSend}
+            onChange={(e) => setPayloadSend(e.target.value)}
+            className="w-full border rounded-lg p-2"
+            rows="3"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block text-gray-700 mb-2">Collection</label>
+          <input
+            type="text"
+            value={collectionSend}
+            onChange={(e) => setCollectionSend(e.target.value)}
+            className="w-full border rounded-lg p-2"
+            required
+          />
+        </div>
+
         <button
           type="submit"
-          className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+          disabled={loading}
+          className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition"
         >
-          Send
+          {loading ? "Sending..." : "Send to DB"}
         </button>
       </form>
 
-      {/* Sandpack */}
-      {files && (
-        <div className="max-h-screen h-max">
-        <Sandpack
-          template="react"
-          files={Object.fromEntries(
-            Object.entries(files).map(([name, code]) => [
-              `/${name}`, 
-              { code }
-            ])
-          )}
-          options={{
-            externalResources: ["https://cdn.tailwindcss.com"],
-            activeFile: "/App.jsx",
-            layout: "preview",
-            editorHeight: 900,
-            editorWidthPercentage: 30,
-            showTabs: true,
-            showLineNumbers: true,
-            showConsole: false,
-          }}
-          customSetup={{
-            dependencies: {
-              react: "^18.2.0",
-              "react-dom": "^18.2.0",
-              tailwindcss: "^3.4.1",
-              postcss: "^8.4.21",
-              autoprefixer: "^10.4.13",
-            },
-          }}
-        />
+      {/* Lookup form */}
+      <form
+        onSubmit={handleLookup}
+        className="bg-white shadow-lg rounded-2xl p-6 w-full max-w-md space-y-4"
+      >
+        <h2 className="text-xl font-semibold">🔍 Lookup</h2>
 
+        <div>
+          <label className="block text-gray-700 mb-2">Payload</label>
+          <textarea
+            value={payloadLookup}
+            onChange={(e) => setPayloadLookup(e.target.value)}
+            className="w-full border rounded-lg p-2"
+            rows="3"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block text-gray-700 mb-2">Collection</label>
+          <input
+            type="text"
+            value={collectionLookup}
+            onChange={(e) => setCollectionLookup(e.target.value)}
+            className="w-full border rounded-lg p-2"
+            required
+          />
+        </div>
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition"
+        >
+          {loading ? "Looking up..." : "Lookup"}
+        </button>
+      </form>
+
+      {/* Results */}
+      {error && (
+        <div className="mt-4 text-red-500 font-medium">❌ {error}</div>
+      )}
+
+      {response && (
+        <div className="mt-6 bg-green-100 p-4 rounded-lg w-full max-w-md">
+          <h2 className="font-bold text-lg mb-2">✅ Response:</h2>
+          <pre className="text-sm text-gray-800 whitespace-pre-wrap">
+            {JSON.stringify(response, null, 2)}
+          </pre>
         </div>
       )}
     </div>
   );
-};
-
-export default Test;
+}
