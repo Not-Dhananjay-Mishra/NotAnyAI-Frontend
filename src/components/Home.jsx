@@ -101,7 +101,7 @@ function App() {
           <div className='mt-5 mx-4 font-bold'>
           <button 
             className="w-full hidden md:block bg-gradient-to-r py-3 from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25 rounded-xl 
-            transform hover:scale-[1.02] transition-all duration-200" onClick={()=>{navigate("/code")}}
+            transform hover:scale-[1.02] transition-all duration-200" onClick={()=>{navigate("/sitecraft")}}
           >
             SiteCraft AI
           </button>

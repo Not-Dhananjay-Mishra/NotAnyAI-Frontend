@@ -6,6 +6,8 @@ import NotFound from './components/NotFound';
 import Home from './components/Home';
 import Test from './components/Test';
 import Code from './components/Code';
+import { TempCode } from './components/TempCode';
+import TempCodeChat from './components/TempCodeChat';
 
 function App() {
   const router = createBrowserRouter([
@@ -28,6 +30,10 @@ function App() {
     {
       path: "/code",
       element: <Code />
+    },
+    {
+      path: "/sitecraft",
+      element: <TempCode />
     },
     {
       path: "*",
