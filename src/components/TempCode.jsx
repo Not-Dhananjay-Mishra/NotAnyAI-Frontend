@@ -60,6 +60,25 @@ export const TempCode = () => {
   const handlequickgen = () => {
     setpage("code");
   }
+
+  const [placeholder, setPlaceholder] = useState("Start building ur dream website...");
+
+  useEffect(() => {
+    const messages = [
+      "Start building your dream website...",
+      "Turn your ideas into reality 🚀",
+      "Code your imagination ✨",
+      "Your next big project starts here 💡",
+      "Design. Build. Launch. 🌐",
+      "What will you create today?"
+    ];
+    let i = 0;
+    const interval = setInterval(() => {
+      setPlaceholder(messages[i % messages.length]);
+      i++;
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
   return (
     <>
       {loading && (
@@ -102,9 +121,9 @@ export const TempCode = () => {
         </div>
         <motion.div className='flex flex-col items-center mt-16 gap-4 bg-slate-900 px-4 py-4 max-w-2xl mx-auto rounded-3xl'
         >
-          <input type="text" name="prompt" id="prompt" className='w-full h-12 p-3 rounded-3xl text-white bg-slate-800 ' 
+          <motion.input type="text" name="prompt" id="prompt" className='w-full h-12 p-3 rounded-3xl text-white bg-slate-800 ' 
           autoComplete="off" value={query} onChange={(e) => setQuery(e.target.value)} onKeyDown={(e)=>{if (e.key=="Enter") handleSubmit()}}
-          placeholder='Start building ur dream website...' />
+          placeholder={placeholder} />
           <div className='flex justify-between items-center w-full'>
             <div className='flex gap-3 items-center justify-end'>
               <input type="submit" className=' bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-3 rounded-3xl text-white font-semibold hover:to-purple-700 hover:bg-slate-600 transition-all duration-300'
