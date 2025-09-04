@@ -353,7 +353,7 @@ const TempCodeChat = ({ queryHome }) => {
                         >
                             <SandpackLayout>
                                 {view === "Code" && (
-                                    <SandpackCodeEditor showTabs wrapContent closableTabs autorun style={{ height: "830px" }} />
+                                    <SandpackCodeEditor showTabs style={{ height: "830px" }} />
                                 )}
 
                                 {view === "Preview" && <SandpackPreview style={{ height: "830px" }} />}
