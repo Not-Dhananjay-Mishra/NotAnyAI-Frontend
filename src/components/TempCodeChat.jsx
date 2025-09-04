@@ -350,6 +350,7 @@ const TempCodeChat = ({ queryHome }) => {
                                 autorun: true,
                                 recompileMode: "immediate",
                                 recompileDelay: 0,
+                                showLineNumbers: true,
                             }}
                         >
                             <SandpackLayout>
