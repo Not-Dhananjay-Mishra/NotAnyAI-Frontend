@@ -98,6 +98,7 @@ const TempCodeChat = ({ queryHome }) => {
     const [processing, setprocessing] = useState([]);
     const [username, Useusername] = useState("")
     const [qhome, Useqhome] = useState(queryHome ?? "")
+    const [limit, setlimit] = useState(0);
     const messagesEndRef = useRef(null);
     const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(`wss://notanyai-backend.onrender.com/wss/chat?token=${token}`);
 
@@ -126,6 +127,7 @@ const TempCodeChat = ({ queryHome }) => {
             console.log(data.status);
             if (data.status === "done") {
                 Useusername(data.username);
+                setlimit(data.sitecraftlimit ?? 0);
             } else {
                 navigate("/login"); // <-- send() isn't defined, I assume you meant navigate
             }
@@ -147,6 +149,7 @@ const TempCodeChat = ({ queryHome }) => {
         setgencomplete([]);
         setprocessing([]);
         setFiles({});
+        setlimit((prev) => (prev > 0 ? prev - 1 : 0));
         setdefaultFiles(loadingdefault);
     }
     //useEffect(() => {
@@ -202,7 +205,7 @@ const TempCodeChat = ({ queryHome }) => {
                 <div className='flex gap-4 items-center'>
                     <h1 className='text-lg font-semibold text-slate-400 hover:text-blue-500 hover:scale-105 duration-300'>{username}</h1>
                     <div className='text-white bg-orange-600 p-2 rounded-2xl font-black text-xs'>
-                        Left - 3/3
+                        Prompt Left - {limit}/5
                     </div>
                 </div>
             </div>

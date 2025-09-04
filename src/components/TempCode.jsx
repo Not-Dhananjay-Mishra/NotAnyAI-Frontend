@@ -80,7 +80,7 @@ export const TempCode = () => {
           <div className='flex gap-4 items-center'>
             <h1 className='text-lg font-semibold text-slate-400 hover:text-blue-500 hover:scale-105 duration-300'>{username}</h1>
             <div className='text-white bg-orange-600 p-2 rounded-2xl font-black text-xs'>
-              Left - {limit}/5
+              Prompt Left - {limit}/5
             </div>
           </div>
 
