@@ -18,7 +18,8 @@ export const TempCode = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setSending(true); 
+    setSending(true);
+    setlimit((prev) => (prev > 0 ? prev - 1 : 0));
     setpage("code");
   }
 
@@ -67,7 +68,7 @@ export const TempCode = () => {
             <h2 className="text-2xl font-semibold">Loading...</h2>
             </div>
       )}
-      {page === "code" && (<TempCodeChat queryHome= {query} />)}
+      {page === "code" && (<TempCodeChat queryHome= {query} limitnew={limit} />)}
       {page === "main" && (
       <div className='bg-gradient-to-b from-slate-950 to-black min-h-screen flex-col text-white'
 

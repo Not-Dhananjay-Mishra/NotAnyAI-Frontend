@@ -83,7 +83,7 @@ const loadingdefault = {
     }
 }
 
-const TempCodeChat = ({ queryHome }) => {
+const TempCodeChat = ({ queryHome, limitnew }) => {
     const token = localStorage.getItem("Authorization");
     const [view,setView] = useState("Preview")
     const [defaultfiles, setdefaultFiles] = useState(defaultFiles);
@@ -160,6 +160,7 @@ const TempCodeChat = ({ queryHome }) => {
     }, [queryHome]);*/
     if (qhome !== "") {
         console.log("Received query from Home:", qhome);
+        setlimit(limitnew)
         handleSubmit(qhome);
         Useqhome("");
     }
