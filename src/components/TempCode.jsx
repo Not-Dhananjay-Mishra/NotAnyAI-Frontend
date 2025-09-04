@@ -62,24 +62,7 @@ export const TempCode = () => {
     setpage("code");
   }
 
-  const [placeholder, setPlaceholder] = useState("Start building ur dream website...");
-
-  useEffect(() => {
-    const messages = [
-      "Start building your dream website...",
-      "Turn your ideas into reality 🚀",
-      "Code your imagination ✨",
-      "Your next big project starts here 💡",
-      "Design. Build. Launch. 🌐",
-      "What will you create today?"
-    ];
-    let i = 0;
-    const interval = setInterval(() => {
-      setPlaceholder(messages[i % messages.length]);
-      i++;
-    }, 2000);
-    return () => clearInterval(interval);
-  }, []);
+  const [placeholder, setPlaceholder] = useState("💡 Start building ur dream website...");
   return (
     <>
       {loading && (

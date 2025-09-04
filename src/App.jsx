@@ -29,12 +29,13 @@ function App() {
     },
     {
       path: "/code",
-      element: <Code />
+      element: <TempCodeChat />
     },
     {
       path: "/sitecraft",
       element: <TempCode />
     },
+
     {
       path: "*",
       element: <NotFound />

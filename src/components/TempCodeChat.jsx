@@ -103,6 +103,7 @@ const TempCodeChat = ({ queryHome }) => {
     const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(`wss://notanyai-backend.onrender.com/wss/chat?token=${token}`);
 
     const GetUser = async () => {
+        console.log("1")
         const token = localStorage.getItem("Authorization");
         if (!token) return { status: "fail" };
 
@@ -122,6 +123,7 @@ const TempCodeChat = ({ queryHome }) => {
         }
     };
     useEffect(() => {
+        console.log("2")
         const fetchUser = async () => {
             const data = await GetUser();
             console.log(data.status);
@@ -136,6 +138,7 @@ const TempCodeChat = ({ queryHome }) => {
         fetchUser();
     }, []);
     const handleSubmit = (customQuery) => {
+        console.log("3")
         const q = (customQuery ?? query).trim();
         if (!q) return;
 
@@ -158,14 +161,13 @@ const TempCodeChat = ({ queryHome }) => {
     }
     }, [queryHome]);*/
     if (qhome !== "") {
+        console.log("4")
         console.log("Received query from Home:", qhome);
         handleSubmit(qhome);
         Useqhome("");
     }
     useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, [think]);
-    useEffect(() => {
+        console.log("5")
         if (lastJsonMessage?.text) {
             setthink((prev) => [...prev, lastJsonMessage.text])
         }
@@ -184,7 +186,6 @@ const TempCodeChat = ({ queryHome }) => {
         else if (lastJsonMessage) {
             const fetchUser = async () => {
                 const data = await GetUser();
-                console.log(data.status);
                 if (data.status === "done") {
                     Useusername(data.username);
                     setlimit(data.sitecraftlimit ?? 0);
@@ -276,7 +277,7 @@ const TempCodeChat = ({ queryHome }) => {
                             </div>)}
                         </div>
                     </div>
-                    <motion.div className='flex flex-col items-center gap-4 bg-slate-900 px-4 py-4 max-w-3xl mx-auto rounded-3xl w-full'
+                    <div className='flex flex-col items-center gap-4 bg-slate-900 px-4 py-4 max-w-3xl mx-auto rounded-3xl w-full'
                     >
                         <input type="text" name="prompt" id="prompt" className='w-full h-12 p-3 rounded-3xl text-white bg-slate-800 '
                             autoComplete="off" value={query} onChange={(e) => setQuery(e.target.value)} onKeyDown={(e) => { if (e.key == "Enter") handleSubmit() }}
@@ -323,7 +324,7 @@ const TempCodeChat = ({ queryHome }) => {
                                 </div>
                             )}
                         </div>
-                    </motion.div>
+                    </div>
                 </div>
 
                 {/* Right panel */}
