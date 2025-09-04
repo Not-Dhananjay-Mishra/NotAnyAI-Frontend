@@ -99,7 +99,7 @@ const TempCodeChat = ({ queryHome }) => {
     const [username, Useusername] = useState("")
     const [qhome, Useqhome] = useState(queryHome ?? "")
     const messagesEndRef = useRef(null);
-    const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(`ws://localhost:8000/wss/chat?token=${token}`);
+    const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(`wss://notanyai-backend.onrender.com/wss/chat?token=${token}`);
 
     const GetUser = async () => {
         const token = localStorage.getItem("Authorization");
