@@ -161,7 +161,6 @@ const TempCodeChat = ({ queryHome }) => {
         setgencomplete([]);
         setprocessing([]);
         setFiles({});
-        setlimit((prev) => (prev > 0 ? prev - 1 : 0));
         setdefaultFiles(loadingdefault);
     }
     //useEffect(() => {
@@ -192,6 +191,7 @@ const TempCodeChat = ({ queryHome }) => {
             setprocessing((prev) => [...prev,lastJsonMessage.processing])
         }
         else if (lastJsonMessage){
+            setlimit((prev) => (prev > 0 ? prev - 1 : 0));
             setFiles(lastJsonMessage)
             setSending(false)
         }
