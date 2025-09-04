@@ -201,12 +201,12 @@ const TempCodeChat = ({ queryHome }) => {
     return (
         <div className='bg-gradient-to-b from-slate-950 to-black min-h-screen flex-col text-white'>
             <div className='flex justify-between p-4 '>
-                <div className='flex gap-2 items-center'>
+                <button onClick={() => navigate("/app")} className='flex gap-2 items-center hover:scale-105 duration-300'>
+                    <div className='flex gap-2 items-center'>
                     <img src={susLogo} alt="sus" height={32} width={32} />
-                    <div className='flex flex-col leading-none'>
-                        <h1 className='text-md font-mono'>NotAnyAI</h1>
+                    <h1 className='text-md font-mono'>NotAnyAI</h1>
                     </div>
-                </div>
+                </button>
                 <div>
                     <button className='bg-slate-800 p-2 rounded-2xl mt-1 hover:scale-95 hover:bg-slate-700 transition-transform duration-150' onClick={() => setView("Code")}>
                         Code 💻

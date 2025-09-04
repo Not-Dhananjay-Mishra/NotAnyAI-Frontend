@@ -44,6 +44,7 @@ export const TempCode = () => {
   };
   useEffect(() => {
     const fetchUser = async () => {
+      setloading(true)
       const data = await GetUser();
       console.log(data.status);
       if (data.status === "done") {
@@ -93,10 +94,12 @@ export const TempCode = () => {
 
       >
         <div className='flex justify-between p-4 '>
-          <div className='flex gap-2 items-center'>
-            <img src={susLogo} alt="sus" height={32} width={32} />
-            <h1 className='text-md font-mono'>NotAnyAI</h1>
-          </div>
+          <button onClick={() => navigate("/app")} className='flex gap-2 items-center hover:scale-105 duration-300'>
+            <div className='flex gap-2 items-center'>
+              <img src={susLogo} alt="sus" height={32} width={32} />
+              <h1 className='text-md font-mono'>NotAnyAI</h1>
+            </div>
+          </button>
           <div className='flex gap-4 items-center'>
             <h1 className='text-lg font-semibold text-slate-400 hover:text-blue-500 hover:scale-105 duration-300'>{username}</h1>
             <div className='text-white bg-orange-600 p-2 rounded-2xl font-black text-xs'>
