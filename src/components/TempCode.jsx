@@ -68,7 +68,7 @@ export const TempCode = () => {
             <h2 className="text-2xl font-semibold">Loading...</h2>
             </div>
       )}
-      {page === "code" && (<TempCodeChat queryHome= {query} limitnew={limit} />)}
+      {page === "code" && (<TempCodeChat queryHome= {query} />)}
       {page === "main" && (
       <div className='bg-gradient-to-b from-slate-950 to-black min-h-screen flex-col text-white'
 

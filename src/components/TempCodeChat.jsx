@@ -83,7 +83,7 @@ const loadingdefault = {
     }
 }
 
-const TempCodeChat = ({ queryHome, limitnew }) => {
+const TempCodeChat = ({ queryHome }) => {
     const token = localStorage.getItem("Authorization");
     const [view,setView] = useState("Preview")
     const [defaultfiles, setdefaultFiles] = useState(defaultFiles);
@@ -136,6 +136,18 @@ const TempCodeChat = ({ queryHome, limitnew }) => {
         fetchUser();
     }, []);
     const handleSubmit = (customQuery) => {
+        const fetchUser = async () => {
+            const data = await GetUser();
+            console.log(data.status);
+            if (data.status === "done") {
+                Useusername(data.username);
+                setlimit(data.sitecraftlimit ?? 0);
+            } else {
+                navigate("/login"); // <-- send() isn't defined, I assume you meant navigate
+            }
+        };
+
+        fetchUser();
         const q = (customQuery ?? query).trim();
         if (!q) return;
 
@@ -160,7 +172,6 @@ const TempCodeChat = ({ queryHome, limitnew }) => {
     }, [queryHome]);*/
     if (qhome !== "") {
         console.log("Received query from Home:", qhome);
-        setlimit(limitnew)
         handleSubmit(qhome);
         Useqhome("");
     }
