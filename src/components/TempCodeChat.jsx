@@ -342,6 +342,7 @@ const TempCodeChat = ({ queryHome }) => {
                                     autoprefixer: "^10.4.13",
                                     "@react-three/fiber": "^8.15.16",
                                     "@react-three/drei": "^9.101.3",
+                                    "framer-motion": "^11.2.6",
                                 },
                             }}
                             options={{
