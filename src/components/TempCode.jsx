@@ -14,6 +14,7 @@ export const TempCode = () => {
   const [username, Useusername] = useState("")
   const [sending, setSending] = useState(false);
   const [loading, setloading] = useState(true);
+  const [limit, setlimit] = useState(0);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -46,6 +47,7 @@ export const TempCode = () => {
       console.log(data.status);
       if (data.status === "done") {
         Useusername(data.username);
+        setlimit(data.sitecraftlimit ?? 0);
         setloading(false);
       } else {
         navigate("/login"); // <-- send() isn't defined, I assume you meant navigate
@@ -67,7 +69,7 @@ export const TempCode = () => {
       )}
       {page === "code" && (<TempCodeChat queryHome= {query} />)}
       {page === "main" && (
-      <div className='bg-gradient-to-b from-slate-950 to-black min-h-screen flex-col text-white '
+      <div className='bg-gradient-to-b from-slate-950 to-black min-h-screen flex-col text-white'
 
       >
         <div className='flex justify-between p-4 '>
@@ -78,7 +80,7 @@ export const TempCode = () => {
           <div className='flex gap-4 items-center'>
             <h1 className='text-lg font-semibold text-slate-400 hover:text-blue-500 hover:scale-105 duration-300'>{username}</h1>
             <div className='text-white bg-orange-600 p-2 rounded-2xl font-black text-xs'>
-              Left - 3/3
+              Left - {limit}/3
             </div>
           </div>
 
