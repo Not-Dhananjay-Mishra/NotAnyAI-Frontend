@@ -348,9 +348,6 @@ const TempCodeChat = ({ queryHome }) => {
                             options={{
                                 externalResources: ["https://cdn.tailwindcss.com"],
                                 editorHeight: 830,
-                                autorun: true,
-                                recompileMode: "immediate",
-                                recompileDelay: 0,
                                 showLineNumbers: true,
                             }}
                         >
@@ -359,7 +356,7 @@ const TempCodeChat = ({ queryHome }) => {
                                     <SandpackCodeEditor showTabs wrapContent closableTabs autorun style={{ height: "830px" }} />
                                 )}
 
-                                {view === "Preview" && <SandpackPreview style={{ height: "830px" }} autorun />}
+                                {view === "Preview" && <SandpackPreview style={{ height: "830px" }} />}
                             </SandpackLayout>
                         </SandpackProvider>
                     </div>
