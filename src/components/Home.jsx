@@ -1,4 +1,4 @@
-import React, { useEffect, useRef  } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useState } from 'react';
 import useWebSocket from 'react-use-websocket';
 import susLogo from '../assets/sus.svg';
@@ -12,6 +12,7 @@ function App() {
   const [inp, Useinp] = useState("")
   const [Msg, UseMsg] = useState("")
   const [CurrMsg, UseCurrMsg] = useState("")
+  const [loading, setloading] = useState(true);
   const messagesEndRef = useRef(null);
   const [username, Useusername] = useState("")
   const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(`wss://notanyai-backend.onrender.com/wss/chat?token=${token}`);
@@ -40,6 +41,7 @@ function App() {
       console.log(data.status);
       if (data.status === "done") {
         Useusername(data.username);
+        setloading(false);
       } else {
         navigate("/login"); // <-- send() isn't defined, I assume you meant navigate
       }
@@ -47,18 +49,18 @@ function App() {
 
     fetchUser();
   }, []);
-    useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, [Msg]);
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [Msg]);
   useEffect(() => {
     if (lastJsonMessage?.text) {
-    const cleanedMsg = lastJsonMessage.text
-      .replace(/^"|"$/g, "") // remove surrounding quotes
-      .replace(/\\n/g, "<br/>") // replace \n with <br/>
-      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>") 
-      .replace(/\*(.*?)\*/g, "<strong>$1</strong>") 
-      .replace(/`([^`]+)`/g, "<code>$1</code>")
-      .trim();
+      const cleanedMsg = lastJsonMessage.text
+        .replace(/^"|"$/g, "") // remove surrounding quotes
+        .replace(/\\n/g, "<br/>") // replace \n with <br/>
+        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+        .replace(/\*(.*?)\*/g, "<strong>$1</strong>")
+        .replace(/`([^`]+)`/g, "<code>$1</code>")
+        .trim();
 
       UseMsg(cleanedMsg);
     }
@@ -85,52 +87,72 @@ function App() {
       sendJsonMessage({ agent: "normal", query: inp, img: "" });
       Useinp("");
       Usefile(null)
-      
+
     }
   };
   return (
-      <div className='flex flex-row h-[100dvh] overflow-hidden relative '>
-        <div className='bg-green-700 hidden md:block  md:w-1/6 bg-gradient-to-b from-slate-950 to-black'>
-          <div className='bg-gradient-to-b from-slate-950 to-black p-6 rounded-b-xl flex items-center gap-3'>
-            <img src={susLogo} alt="sus" height={64} width={64} />
-            <div className='text-white hidden md:block'>
-              <h1 className='text-xl font-bold'>NotAny AI</h1>
-              <h2>Your AI Assistant</h2>
+    <>
+      {loading && (
+            <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-slate-950 to-black text-white">
+            <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-white mb-6"></div>
+            <h2 className="text-2xl font-semibold">Loading...</h2>
             </div>
+      )}
+    
+    {!loading && (<div className='flex flex-row h-[100dvh] overflow-hidden relative '>
+      <div className='bg-green-700 hidden md:block  md:w-1/6 bg-gradient-to-b from-slate-950 to-black'>
+        <div className='bg-gradient-to-b from-slate-950 to-black p-6 rounded-b-xl flex items-center gap-3'>
+          <img src={susLogo} alt="sus" height={64} width={64} />
+          <div className='text-white hidden md:block'>
+            <h1 className='text-xl font-bold'>NotAny AI</h1>
+            <h2>Your AI Assistant</h2>
           </div>
-          <div className='mt-5 mx-4 font-bold'>
-          <button 
+        </div>
+        <div className='mt-5 mx-4 font-bold'>
+          <button
             className="w-full hidden md:block bg-gradient-to-r py-3 from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25 rounded-xl 
-            transform hover:scale-[1.02] transition-all duration-200" onClick={()=>{navigate("/sitecraft")}}
+            transform hover:scale-[1.02] transition-all duration-200" onClick={() => { navigate("/sitecraft") }}
           >
             SiteCraft AI
           </button>
-          <button 
+          <button
             className="w-full md:hidden bg-gradient-to-r py-3 from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25 rounded-xl transform hover:scale-[1.02] transition-all duration-200"
           >
-            + 
+            +
           </button>
-          </div>
         </div>
-        <div className='bg-red-500 flex-1 bg-gradient-to-b from-[#020d1f] via-black to-[#020d1f] text-white '>
-            <div className='flex flex-col h-full'>
-              <div className=' bg-gradient-to-b from-[#020d1f] to-[#020d1f] px-8 py-5 flex justify-between'>
-                    <div className='flex gap-2 items-center'>
-                    <img src={susLogo} alt="sus" height={32} width={32} />
-                    <h1 className='text-lg md:text-xl font-semibold'>NotAnyAI</h1>
-                    </div>
-                <div>
-                </div>
-              </div>
-              <div className='flex-1 p-4 overflow-y-auto'>
-                <div className='flex flex-col justify-centre '>
-                    {CurrMsg === "" && Msg === "" && (
-                      <div className='flex flex-col justify-center items-center text-center mt-32'>
-                        <h1 className='text-4xl md:text-6xl font-bold mb-1'>Welcome Back!</h1>
-                        <h1 className="text-xl md:text-3xl text-blue-400 mb-2">{username} <span className="text-xl text-white">ready to explore AI today?</span></h1>
-                        <h2 className="text-xl font-bold text-white mb-10">✨ Latest Feature Added</h2>
-                        <div className="flex flex-col md:flex-row gap-6 justify-center items-stretch max-w-4xl">
-                          <div className="flex-1 bg-gradient-to-r p-5 from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl shadow-lg transition-transform transform hover:scale-105">
+      </div>
+      <div className='bg-red-500 flex-1 bg-gradient-to-b from-[#020d1f] via-black to-[#020d1f] text-white '>
+        <div className='flex flex-col h-full'>
+          <div className=' bg-gradient-to-b from-[#020d1f] to-[#020d1f] px-8 py-5 flex justify-between'>
+            <div className='flex gap-2 items-center'>
+              <img src={susLogo} alt="sus" height={32} width={32} />
+              <h1 className='text-lg md:text-xl font-semibold'>NotAnyAI</h1>
+            </div>
+            <div>
+            </div>
+          </div>
+          <div className='flex-1 p-4 overflow-y-auto'>
+            <div className='flex flex-col justify-centre '>
+              {CurrMsg === "" && Msg === "" && (
+                <div className='flex flex-col justify-center items-center text-center mt-32'>
+                  <h1 className='text-4xl md:text-6xl font-bold mb-1'>Welcome Back!</h1>
+                  <h1 className="text-xl md:text-3xl text-blue-400 mb-2">{username} <span className="text-xl text-white">ready to explore AI today?</span></h1>
+                  <h2 className="text-lg font-bold text-white mb-1 tracking-tight">
+                    Looks like you haven't tried <span className="text-blue-400"> Sitecraft AI</span> yet
+                  </h2>
+                  <p className='text-[12px] text-center mb-4'>Use Desktop for better experience</p>
+                  <button 
+                  onClick={() => { navigate("/sitecraft") }}
+                  className="bg-gradient-to-r from-blue-600 to-blue-800 px-5 py-2 rounded-full text-sm font-medium text-white shadow-md hover:scale-105 hover:shadow-lg transition-all duration-300">
+                    <div>
+                      <h1>Try Sitecraft AI</h1>
+                      </div>
+                  </button>
+                  
+                  
+                  <div className="flex flex-col md:flex-row gap-6 justify-center items-stretch max-w-4xl">
+                    {/*<div className="flex-1 bg-gradient-to-r p-5 from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl shadow-lg transition-transform transform hover:scale-105">
                             <h1 className="text-xl md:text-2xl font-bold text-white mb-2">Image-to-Text AI</h1>
                             <p className="text-white/80 text-sm md:text-base">
                               Upload images and get intelligent responses from the AI based on the content! 📸🤖
@@ -143,85 +165,86 @@ function App() {
                               Generate fully functional websites in seconds using AI just describe what you need! 🌐✨
                             </p>
                             <p className="text-white/80 text-sm md:text-base font-bold">(Desktop Only)</p>
-                          </div>
-                        </div>
-
-                      </div>
-                    )}
-                    {lastfile && (
-                      <div className='self-end'>
-                        <img
-                          src={URL.createObjectURL(lastfile)}
-                          alt={lastfile.name}
-                          className="max-w-xs rounded-md mb-2"
-                        />
-                      </div>
-                    )}
-                {CurrMsg !== "" && (
-                
-                  <div className='border rounded-xl p-3 w-fit border-gray-700 text-sm text-white bg-gradient-to-br from-blue-500 to-blue-600 self-end'>
-                    {CurrMsg}
-                  </div>)}
-                  {Msg !== "" &&
-                  <p
-                    style={{ whiteSpace: 'pre-wrap' }}
-                    dangerouslySetInnerHTML={{ __html: "AI : " + Msg }}
-                    className='border rounded-xl p-3 w-fit border-gray-700 text-sm text-white bg-gray-900 m-2 '
-                  ></p>}
-                  <div ref={messagesEndRef} />
-                </div>
-              </div>
-              
-              <div className="p-4 border-t border-slate-700 flex flex-shrink-0 gap-2 justify-center items-center">
-                <div className='w-3/4  overflow-hidden '>
-                <div className='max-h-16 rounded-t-xl bg-slate-900 p-2 flex items-start justify-start'>
-                  {file && (
-                    <div className="flex items-center gap-2">
-                      <img
-                        src={URL.createObjectURL(file)}
-                        alt="preview"
-                        className="w-10 h-10 rounded-md object-cover"
-                      />
-                      <span className="text-xs text-slate-300 ">{file.name}</span>
-                    </div>
-                  )}
-                </div>
-                  <input onKeyDown={(e)=>{if (e.key=="Enter") handleSend()}} value={inp} onChange={(e)=>{Useinp(e.target.value)}} 
-                  type="text" className='border-none bg-slate-900 max-w-full w-full p-4 rounded-b-xl hover:border-white/40 outline-none focus:outline-none' 
-                  placeholder='Enter your prompt'/>
-                </div>
-                <div>
-                  <input type="file" id="fileInput" 
-                  accept="image/*" 
-                   onChange={(e) => {
-                      if (e.target.files && e.target.files[0]) {
-                        Usefile(e.target.files[0]);
-                      }
-                    }}
-                  className="w-10 h-10 hidden items-center justify-center rounded-full hover:bg-slate-600 cursor-pointer transition-colors"/>
-                    <label
-                    htmlFor="fileInput"
-                    className="px-3 py-3 flex items-center bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 justify-center rounded-full hover:bg-slate-600 cursor-pointer transition-colors"
-                    >
-                    {/* Camera Icon */}
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="2"
-                      stroke="currentColor"
-                      className="w-6 h-6  text-white"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 7h3l2-3h8l2 3h3v13H3V7z" />
-                      <circle cx="12" cy="13" r="4" />
-                    </svg>
-                  </label>
+                          </div>*/}
                   </div>
-                <div><button onClick={handleSend} className=' bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-4 py-3 rounded-full hover:scale-90'>→</button></div>
-              </div>
+
+                </div>
+              )}
+              {lastfile && (
+                <div className='self-end'>
+                  <img
+                    src={URL.createObjectURL(lastfile)}
+                    alt={lastfile.name}
+                    className="max-w-xs rounded-md mb-2"
+                  />
+                </div>
+              )}
+              {CurrMsg !== "" && (
+
+                <div className='border rounded-xl p-3 w-fit border-gray-700 text-sm text-white bg-gradient-to-br from-blue-500 to-blue-600 self-end'>
+                  {CurrMsg}
+                </div>)}
+              {Msg !== "" &&
+                <p
+                  style={{ whiteSpace: 'pre-wrap' }}
+                  dangerouslySetInnerHTML={{ __html: "AI : " + Msg }}
+                  className='border rounded-xl p-3 w-fit border-gray-700 text-sm text-white bg-gray-900 m-2 '
+                ></p>}
+              <div ref={messagesEndRef} />
             </div>
+          </div>
+
+          <div className="p-4 border-t border-slate-700 flex flex-shrink-0 gap-2 justify-center items-center">
+            <div className='w-3/4  overflow-hidden '>
+              <div className='max-h-16 rounded-t-xl bg-slate-900 p-2 flex items-start justify-start'>
+                {file && (
+                  <div className="flex items-center gap-2">
+                    <img
+                      src={URL.createObjectURL(file)}
+                      alt="preview"
+                      className="w-10 h-10 rounded-md object-cover"
+                    />
+                    <span className="text-xs text-slate-300 ">{file.name}</span>
+                  </div>
+                )}
+              </div>
+              <input onKeyDown={(e) => { if (e.key == "Enter") handleSend() }} value={inp} onChange={(e) => { Useinp(e.target.value) }}
+                type="text" className='border-none bg-slate-900 max-w-full w-full p-4 rounded-b-xl hover:border-white/40 outline-none focus:outline-none'
+                placeholder='Enter your prompt' />
+            </div>
+            <div>
+              <input type="file" id="fileInput"
+                accept="image/*"
+                onChange={(e) => {
+                  if (e.target.files && e.target.files[0]) {
+                    Usefile(e.target.files[0]);
+                  }
+                }}
+                className="w-10 h-10 hidden items-center justify-center rounded-full hover:bg-slate-600 cursor-pointer transition-colors" />
+              <label
+                htmlFor="fileInput"
+                className="px-3 py-3 flex items-center bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-purple-700 justify-center rounded-full hover:bg-slate-600 cursor-pointer transition-colors"
+              >
+                {/* Camera Icon */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="2"
+                  stroke="currentColor"
+                  className="w-6 h-6  text-white"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 7h3l2-3h8l2 3h3v13H3V7z" />
+                  <circle cx="12" cy="13" r="4" />
+                </svg>
+              </label>
+            </div>
+            <div><button onClick={handleSend} className=' bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-purple-700 px-4 py-3 rounded-full hover:scale-90'>→</button></div>
+          </div>
         </div>
       </div>
+    </div>)}
+    </>
   )
 }
 
