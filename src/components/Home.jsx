@@ -90,8 +90,8 @@ function App() {
   };
   return (
       <div className='flex flex-row h-[100dvh] overflow-hidden relative '>
-        <div className='bg-green-700 hidden md:block  md:w-1/6 bg-gradient-to-br from-slate-800 to-slate-800'>
-          <div className='bg-gradient-to-r from-blue-500/20 to-purple-500/20 p-6 rounded-b-xl flex items-center gap-3'>
+        <div className='bg-green-700 hidden md:block  md:w-1/6 bg-gradient-to-b from-slate-950 to-black'>
+          <div className='bg-gradient-to-b from-slate-950 to-black p-6 rounded-b-xl flex items-center gap-3'>
             <img src={susLogo} alt="sus" height={64} width={64} />
             <div className='text-white hidden md:block'>
               <h1 className='text-xl font-bold'>NotAny AI</h1>
@@ -112,18 +112,14 @@ function App() {
           </button>
           </div>
         </div>
-        <div className='bg-red-500 flex-1 bg-gradient-to-br from-slate-900 via-slate-800 to-blue-950 text-white '>
+        <div className='bg-red-500 flex-1 bg-gradient-to-b from-[#020d1f] via-black to-[#020d1f] text-white '>
             <div className='flex flex-col h-full'>
-              <div className=' bg-gradient-to-br from-slate-900/80 to-slate-800/80 px-8 py-5 flex justify-between'>
+              <div className=' bg-gradient-to-b from-[#020d1f] to-[#020d1f] px-8 py-5 flex justify-between'>
+                    <div className='flex gap-2 items-center'>
+                    <img src={susLogo} alt="sus" height={32} width={32} />
+                    <h1 className='text-lg md:text-xl font-semibold'>NotAnyAI</h1>
+                    </div>
                 <div>
-                  <h1 className='text-lg md:text-xl'>Welcome to <span className='font-bold'>NotAny AI</span></h1>
-                  <p className=' text-xs md:text-xs text-slate-400'>Powered by advanced AI • Always here to help</p>
-                </div>
-                <div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                    <span className="text-xs text-slate-500">Online</span>
-                  </div>
                 </div>
               </div>
               <div className='flex-1 p-4 overflow-y-auto'>
@@ -178,7 +174,7 @@ function App() {
               
               <div className="p-4 border-t border-slate-700 flex flex-shrink-0 gap-2 justify-center items-center">
                 <div className='w-3/4  overflow-hidden '>
-                <div className='max-h-16 rounded-t-xl bg-slate-700 p-2 flex items-start justify-start'>
+                <div className='max-h-16 rounded-t-xl bg-slate-900 p-2 flex items-start justify-start'>
                   {file && (
                     <div className="flex items-center gap-2">
                       <img
@@ -191,7 +187,7 @@ function App() {
                   )}
                 </div>
                   <input onKeyDown={(e)=>{if (e.key=="Enter") handleSend()}} value={inp} onChange={(e)=>{Useinp(e.target.value)}} 
-                  type="text" className='border-none bg-slate-700 max-w-full w-full p-4 rounded-b-xl hover:border-white/40 outline-none focus:outline-none' 
+                  type="text" className='border-none bg-slate-900 max-w-full w-full p-4 rounded-b-xl hover:border-white/40 outline-none focus:outline-none' 
                   placeholder='Enter your prompt'/>
                 </div>
                 <div>
