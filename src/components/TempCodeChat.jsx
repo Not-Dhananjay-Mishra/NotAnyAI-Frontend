@@ -100,7 +100,7 @@ const TempCodeChat = ({ queryHome }) => {
     const [qhome, Useqhome] = useState(queryHome ?? "")
     const [limit, setlimit] = useState(0);
     const messagesEndRef = useRef(null);
-    const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(`ws://localhost:8000/wss/chat?token=${token}`);
+    const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(`wss://notanyai-backend.onrender.com/wss/chat?token=${token}`);
 
     const GetUser = async () => {
         console.log("1")
@@ -138,7 +138,6 @@ const TempCodeChat = ({ queryHome }) => {
         fetchUser();
     }, []);
     const handleSubmit = (customQuery) => {
-        console.log("3")
         const q = (customQuery ?? query).trim();
         if (!q) return;
 
@@ -285,7 +284,7 @@ const TempCodeChat = ({ queryHome }) => {
                         <div className='flex justify-between items-center w-full'>
                             <div className='flex gap-3 items-center justify-end'>
                                 <input type="submit" className=' bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-3 rounded-3xl text-white font-semibold hover:to-purple-700 hover:bg-slate-600 transition-all duration-300'
-                                    onClick={handleSubmit} value={sending ? "Generating" : "Generate"} disabled={sending}>
+                                    onClick={() => {handleSubmit()}} value={sending ? "Generating" : "Generate"} disabled={sending}>
                                 </input>
                                 <input type="file" id="fileInput"
                                     accept="image/*"
