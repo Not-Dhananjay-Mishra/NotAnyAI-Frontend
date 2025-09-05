@@ -205,26 +205,26 @@ const TempCodeChat = ({ queryHome }) => {
                 <button onClick={() => navigate("/app")} className='flex gap-2 items-center hover:scale-105 duration-300'>
                     <div className='flex gap-2 items-center'>
                     <img src={susLogo} alt="sus" height={32} width={32} />
-                    <h1 className='text-md font-mono'>NotAnyAI</h1>
+                    <h1 className='hidden md:inline text-md font-mono'>NotAnyAI</h1>
                     </div>
                 </button>
-                <div>
-                    <button className='bg-slate-800 p-2 rounded-2xl mt-1 hover:scale-95 hover:bg-slate-700 transition-transform duration-150' onClick={() => setView("Code")}>
-                        Code 💻
+                <div className='flex flex-row md:flex-row gap-2 items-center'>
+                    <button className='bg-slate-800 p-2 md:p-3 text-xs md:text-[16px] rounded-2xl  hover:scale-95 hover:bg-slate-700 transition-transform duration-150' onClick={() => setView("Code")}>
+                        Code <span className='hidden md:inline'>💻</span>
                     </button>
-                    <button className='bg-slate-800 p-2 rounded-2xl mt-1 ml-2 hover:scale-95 hover:bg-slate-700 transition-transform duration-150' onClick={() => setView("Preview")} >
-                        Preview ✨
+                    <button className='bg-slate-800 p-2 md:p-3 text-xs md:text-[16px] rounded-2xl  hover:scale-95 hover:bg-slate-700 transition-transform duration-150' onClick={() => setView("Preview")} >
+                        Preview <span className='hidden md:inline'>✨</span>
                     </button>
                 </div>
                 <div className='flex gap-4 items-center'>
-                    <h1 className='text-lg font-semibold text-slate-400 hover:text-blue-500 hover:scale-105 duration-300'>{username}</h1>
-                    <div className='text-white bg-orange-600 p-2 rounded-2xl font-black text-xs'>
-                        Prompt Left - {limit}/5
+                    <h1 className='text-xs md:text-lg font-semibold text-slate-400 hover:text-blue-500 hover:scale-105 duration-300'>{username}</h1>
+                    <div className='text-white bg-orange-600 p-2 rounded-2xl text-[10px] font-black md:text-xs'>
+                        <span className='hidden md:inline'>Prompt Left - </span>{limit}/5
                     </div>
                 </div>
             </div>
-            <div className="flex flex-row flex-1 overflow-hidden p-3">
-                <div className="w-1/5 bg-gradient-to-b from-slate-950 to-black rounded-2xl flex flex-col p-3">
+            <div className="flex flex-col md:flex-row flex-1 overflow-hidden p-3">
+                <div className="md:w-1/5 bg-gradient-to-b from-slate-950 to-black rounded-2xl flex flex-col p-3">
                     <div className="flex-1 text-white overflow-y-auto scrollbar-hide">
                         <div className='flex flex-col gap-2 overflow-y-auto scrollbar-hide'>
                             {lastquery === "" && (
@@ -328,7 +328,7 @@ const TempCodeChat = ({ queryHome }) => {
                 </div>
 
                 {/* Right panel */}
-                <div className="w-4/5 bg-gradient-to-b from-slate-950 to-black rounded-2xl ml-3 text-white max-w-4/5">
+                <div className="md:w-4/5 bg-gradient-to-b from-slate-950 to-black rounded-2xl md:ml-3 text-white md:max-w-4/5">
                     <div className="flex-1 bg-slate-900 rounded-2xl m-3 overflow-hidden h-[830px]">
                         <SandpackProvider
                             template="react"
