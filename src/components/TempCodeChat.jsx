@@ -85,6 +85,7 @@ const loadingdefault = {
 
 const TempCodeChat = ({ queryHome }) => {
     const token = localStorage.getItem("Authorization");
+    const navigate = useNavigate();
     const [view, setView] = useState("Preview")
     const [defaultfiles, setdefaultFiles] = useState(defaultFiles);
     const [files, setFiles] = useState({});
