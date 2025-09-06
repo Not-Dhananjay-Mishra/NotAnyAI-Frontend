@@ -29,7 +29,7 @@ function App() {
     },
     {
       path: "/code",
-      element: <TempCodeChat />
+      element: <Code />
     },
     {
       path: "/sitecraft",

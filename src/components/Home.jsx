@@ -3,9 +3,11 @@ import { useState } from 'react';
 import useWebSocket from 'react-use-websocket';
 import susLogo from '../assets/sus.svg';
 import { useNavigate } from "react-router-dom";
+import { h1 } from 'motion/react-client';
 
 function App() {
   const token = localStorage.getItem("Authorization");
+  const [sitecraft, setsitecraft] = useState("");
   const navigate = useNavigate();
   const [file, Usefile] = useState(null)
   const [lastfile, Uselastfile] = useState(null)
@@ -53,6 +55,9 @@ function App() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [Msg]);
   useEffect(() => {
+    if (lastJsonMessage?.sitecraft) {
+      setsitecraft(lastJsonMessage.sitecraft);
+    }
     if (lastJsonMessage?.text) {
       const cleanedMsg = lastJsonMessage.text
         .replace(/^"|"$/g, "") // remove surrounding quotes
@@ -151,25 +156,6 @@ function App() {
                         <h1>Try Sitecraft AI</h1>
                       </div>
                     </button>
-
-
-                    <div className="flex flex-col md:flex-row gap-6 justify-center items-stretch max-w-4xl">
-                      {/*<div className="flex-1 bg-gradient-to-r p-5 from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl shadow-lg transition-transform transform hover:scale-105">
-                            <h1 className="text-xl md:text-2xl font-bold text-white mb-2">Image-to-Text AI</h1>
-                            <p className="text-white/80 text-sm md:text-base">
-                              Upload images and get intelligent responses from the AI based on the content! 📸🤖
-                            </p>
-                          </div>
-
-                          <div className="flex-1 bg-gradient-to-r p-5 from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl shadow-lg transition-transform transform hover:scale-105">
-                            <h1 className="text-xl md:text-2xl font-bold text-white mb-2">SiteCraft AI</h1>
-                            <p className="text-white/80 text-sm md:text-base">
-                              Generate fully functional websites in seconds using AI just describe what you need! 🌐✨
-                            </p>
-                            <p className="text-white/80 text-sm md:text-base font-bold">(Desktop Only)</p>
-                          </div>*/}
-                    </div>
-
                   </div>
                 )}
                 {lastfile && (
@@ -186,7 +172,20 @@ function App() {
                   <div className='border rounded-xl p-3 w-fit border-gray-700 text-sm text-white bg-gradient-to-br from-blue-500 to-blue-600 self-end'>
                     {CurrMsg}
                   </div>)}
-                {Msg !== "" &&
+                {sitecraft !== "" && (
+                  <div className='border rounded-xl p-3 w-fit border-gray-700 text-sm text-white bg-gray-900 m-2 '>
+                    <p>{Msg}</p>
+                    <div className='flex gap-2 mt-2'>
+                      <button 
+                      onClick={() => { navigate("/sitecraft") }}
+                      className='bg-gradient-to-r from-blue-600 to-blue-800 px-5 py-2 rounded-full text-sm font-medium text-white shadow-md hover:scale-105 hover:shadow-lg transition-all duration-300'>Yes</button>
+                      <button 
+                      onClick={() => { setsitecraft(""); UseMsg("") }}
+                      className='bg-gradient-to-r from-red-600 to-red-800 px-5 py-2 rounded-full text-sm font-medium text-white shadow-md hover:scale-105 hover:shadow-lg transition-all duration-300'>No</button>
+                    </div>
+                  </div>
+                )}
+                {Msg !== "" && sitecraft === "" &&
                   <p
                     style={{ whiteSpace: 'pre-wrap' }}
                     dangerouslySetInnerHTML={{ __html: "AI : " + Msg }}
