@@ -103,7 +103,7 @@ const Code = ({ queryHome }) => {
   const [qhome, Useqhome] = useState(queryHome ?? "")
   const [limit, setlimit] = useState(0);
   const messagesEndRef = useRef(null);
-  const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(`wss://notanyai-backend.onrenderr.com/wss/chat?token=${token}`);
+  const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(`wss://notanyai-backend.onrender.com/wss/chat?token=${token}`);
   const [gotmsg, setgotmsg] = useState(false)
   const instanceRef = useRef(null);
   const [webcontainerInstance, setWebcontainerInstance] = useState(null);
