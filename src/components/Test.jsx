@@ -21,7 +21,7 @@ export default function Test() {
     setResponse(null);
 
     try {
-      const res = await fetch(`http://localhost:8000/api/rag/${endpoint}`, {
+      const res = await fetch(`https://notanyai-backend.onrender.com/api/rag/${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -58,7 +58,7 @@ export default function Test() {
   };
 
   return (
-    <div className="min-h-screen flex flex-row items-start justify-center bg-gray-100 p-6 space-x-8">
+    <div className="min-h-screen md:flex md:flex-row items-start justify-center bg-gray-100 p-6 gap-3">
       {/* Send to DB form */}
       <form
         onSubmit={handleSendToDb}
@@ -72,7 +72,8 @@ export default function Test() {
             value={embeddingPayload}
             onChange={(e) => setEmbeddingPayload(e.target.value)}
             className="w-full border rounded-lg p-2"
-            rows="2"
+            rows="4"
+            placeholder="A brief description of the solution... example : this exercise is for chest dont explain process just say its for xyz muscle and bla bla bla... and it benifits are..."
             required
           />
         </div>
@@ -83,7 +84,8 @@ export default function Test() {
             value={payloadSend}
             onChange={(e) => setPayloadSend(e.target.value)}
             className="w-full border rounded-lg p-2"
-            rows="3"
+            placeholder="The Solution explained in detail... example : this exercise is for chest we do xyz for 5min if u have abc problem do it only 1 min desc about exercise - bla bla bla..."
+            rows="4"
             required
           />
         </div>
@@ -95,6 +97,7 @@ export default function Test() {
             value={collectionSend}
             onChange={(e) => setCollectionSend(e.target.value)}
             className="w-full border rounded-lg p-2"
+            placeholder="for SIH Fitness app use SIH"
             required
           />
         </div>
