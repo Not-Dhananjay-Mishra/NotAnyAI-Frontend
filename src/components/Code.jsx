@@ -103,7 +103,7 @@ const Code = ({ queryHome }) => {
   const [qhome, Useqhome] = useState(queryHome ?? "")
   const [limit, setlimit] = useState(0);
   const messagesEndRef = useRef(null);
-  const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(`wss://notanyai-backend.onrender.com/wss/chat?token=${token}`);
+  const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(`wss://notanyai-backend.onrenderr.com/wss/chat?token=${token}`);
   const [gotmsg, setgotmsg] = useState(false)
   const instanceRef = useRef(null);
   const [webcontainerInstance, setWebcontainerInstance] = useState(null);
@@ -232,7 +232,7 @@ const Code = ({ queryHome }) => {
         </div>
       </div>
       <div className="flex flex-col md:flex-row flex-1 overflow-hidden p-3">
-        <div className="md:w-1/5 bg-gradient-to-b from-slate-950 to-black rounded-2xl flex flex-col p-3">
+        <div className="md:w-1/5 bg-gradient-to-b from-slate-950 to-black rounded-2xl flex flex-col p-3 overflow-y-hidden">
           <div className="flex-1 text-white overflow-y-auto scrollbar-hide">
             <div className='flex flex-col gap-2 overflow-y-auto scrollbar-hide'>
               {lastquery === "" && (
