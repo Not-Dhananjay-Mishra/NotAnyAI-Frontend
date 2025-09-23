@@ -4,7 +4,7 @@ import useWebSocket from 'react-use-websocket';
 import susLogo from '../assets/sus.svg';
 import { useNavigate } from "react-router-dom";
 import { motion } from 'framer-motion';
-import TempCodeChat from './TempCodeChat';
+import Code from './Code';
 
 export const TempCode = () => {
   const navigate = useNavigate();
@@ -71,7 +71,7 @@ export const TempCode = () => {
             <h2 className="text-2xl font-semibold">Loading...</h2>
             </div>
       )}
-      {page === "code" && (<TempCodeChat queryHome= {query} />)}
+      {page === "code" && (<Code queryHome= {query} />)}
       {page === "main" && (
       <div className='bg-gradient-to-b from-slate-950 to-black min-h-screen flex-col text-white'
 

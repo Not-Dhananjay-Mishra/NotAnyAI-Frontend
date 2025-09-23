@@ -3,18 +3,19 @@ import {useNavigate} from 'react-router-dom'
 import { Logo } from "./Logo";
 
 function Hero() {
-  const send = useNavigate()
-  const GetUser = async () => {
-    const token = localStorage.getItem("Authorization");
-    if (!token) return { status: "fail" };
+  const send = useNavigate();
 
+  const GetUser = async () => {
     try {
       const res = await fetch("https://notanyai-backend.onrender.com/validate", {
+        method: "GET",
         headers: {
-          "Authorization": `${token}`,
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // ✅ send cookies automatically
       });
+
+      if (!res.ok) return { status: "fail" };
 
       const json = await res.json();
       return json;
@@ -23,19 +24,21 @@ function Hero() {
       return { status: "fail" };
     }
   };
+
   const HandleGetstarted = () => {
     const fetchUser = async () => {
       const data = await GetUser();
-      console.log(data.status);
+      console.log("Validation response:", data);
+
       if (data.status === "done") {
-        send("/app")
+        send("/app");
       } else {
-        send("/login")
+        send("/login");
       }
     };
 
     fetchUser();
-  }
+  };
   return (
     <div className="min-h-screen flex flex-col items-center bg-gradient-to-b from-[#020d1f] via-black to-[#020d1f] text-white text-center px-4 relative">
       <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 backdrop-blur-sm border border-blue-200/30 rounded-full px-6 py-2 mb-8 mt-12 hover:scale-110 transition-all duration-300 hover:shadow-xl shadow-md">

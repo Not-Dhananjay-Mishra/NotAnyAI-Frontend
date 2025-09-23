@@ -4,53 +4,16 @@ import useWebSocket from 'react-use-websocket';
 import susLogo from '../assets/sus.svg';
 import { useNavigate } from "react-router-dom";
 import { motion } from 'framer-motion';
+import { WebContainer } from "@webcontainer/api";
+
 import {
     SandpackProvider,
     SandpackLayout,
     SandpackCodeEditor,
     SandpackPreview,
 } from "@codesandbox/sandpack-react";
-const defaultFiles = {
-    "/App.js": {
-        code: `
-        import React from 'react';
-        import Hero from './Hero.jsx';
 
-        function App() {
-        return (
-            <div className="min-h-screen bg-gradient-to-b from-slate-950 to-black text-white">
-            <Hero />
-            </div>
-        );
-        }
 
-        export default App;
-    `,
-    },
-    "/Hero.jsx": {
-        code: `
-        import React from 'react';
-
-        const Hero = () => {
-        return (
-            <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-slate-950 to-black text-white p-4">
-            <h1 className="text-5xl md:text-6xl font-extrabold text-center mb-4 leading-tight">
-                SiteCraft AI by NotAnyAI
-            </h1>
-            <p className="text-xl md:text-2xl text-center max-w-2xl mb-8">
-                Unlock your creativity. Create stunning websites with just a prompt!
-            </p>
-            <button className="bg-white text-blue-600 px-8 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-gray-100 transform hover:scale-105 transition duration-300 ease-in-out">
-                Start Building 🚀
-            </button>
-            </div>
-        );
-        };
-
-        export default Hero;
-    `,
-    },
-};
 
 const loadingdefault = {
     "App.js": {
@@ -86,6 +49,8 @@ const loadingdefault = {
 const TempCodeChat = ({ queryHome }) => {
     const token = localStorage.getItem("Authorization");
     const navigate = useNavigate();
+      const [iframeSrc, setIframeSrc] = useState(null);
+      const [webcontainerInstance, setWebcontainerInstance] = useState(null);
     const [view, setView] = useState("Preview")
     const [defaultfiles, setdefaultFiles] = useState(defaultFiles);
     const [files, setFiles] = useState({});
@@ -167,6 +132,24 @@ const TempCodeChat = ({ queryHome }) => {
         Useqhome("");
     }
     useEffect(() => {
+
+        const startContainer = async (files) => {
+          const webcontainer = await WebContainer.boot();
+          setWebcontainerInstance(webcontainer);
+    
+          await webcontainer.mount(files);
+    
+          const installProcess = await webcontainer.spawn("npm", ["install"]);
+          await installProcess.exit;
+    
+          webcontainer.spawn("npm", ["run", "dev"]);
+    
+          webcontainer.on("server-ready", (port, url) => {
+            console.log("Next.js dev server running at:", url);
+            setIframeSrc(url);
+          });
+        };
+
         console.log("5")
         if (lastJsonMessage?.text) {
             setthink((prev) => [...prev, lastJsonMessage.text])
@@ -181,6 +164,8 @@ const TempCodeChat = ({ queryHome }) => {
             setprocessing((prev) => [...prev, lastJsonMessage.processing])
             if (lastJsonMessage.processing.includes("exhausted")) {
                 setdefaultFiles(defaultFiles)
+                const files = transformPostCodeResponse(lastJsonMessage);
+                startContainer(files);
             }
         }
         else if (lastJsonMessage) {
