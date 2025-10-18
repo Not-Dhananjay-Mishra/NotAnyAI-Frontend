@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 
-
 function transformPostCodeResponse(data) {
   if (!data) return {};
 
@@ -12,7 +11,6 @@ function transformPostCodeResponse(data) {
   }
 
   for (const [filename, contents] of Object.entries(data?.backendCode ?? {})) {
-    // Normalize backend file names so "video/[id].js" -> "video[id].js"
     const normalized = filename.replace(/\//g, '');
     api[normalized] = { file: { contents } };
   }
@@ -25,11 +23,12 @@ function transformPostCodeResponse(data) {
         "_app.js": {
           file: {
             contents: `
-            import '../styles/globals.css';
-            export default function App({ Component, pageProps }) {
-              return <Component {...pageProps} />
-            }
-          `,
+import '../styles/globals.css';
+
+export default function App({ Component, pageProps }) {
+  return <Component {...pageProps} />
+}
+            `,
           },
         },
       },
@@ -39,10 +38,10 @@ function transformPostCodeResponse(data) {
         "globals.css": {
           file: {
             contents: `
-            @tailwind base;
-            @tailwind components;
-            @tailwind utilities;
-          `,
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+            `,
           },
         },
       },
@@ -50,18 +49,23 @@ function transformPostCodeResponse(data) {
     "tailwind.config.js": {
       file: {
         contents: `
-          export default {
-            content: ['./pages/**/*.{js,jsx}'],
-            theme: { extend: {} },
-            plugins: [],
-          };
+export default {
+  content: ['./pages/**/*.{js,jsx}'],
+  theme: { extend: {} },
+  plugins: [],
+};
         `,
       },
     },
     "postcss.config.js": {
       file: {
         contents: `
-          export default { plugins: { tailwindcss: {}, autoprefixer: {} } }
+export default { 
+  plugins: { 
+    tailwindcss: {}, 
+    autoprefixer: {} 
+  } 
+}
         `,
       },
     },
@@ -92,54 +96,110 @@ function transformPostCodeResponse(data) {
   };
 }
 
-
 export const RenderCode = ({ file, ws }) => {
-    const [iframeSrc, setIframeSrc] = useState(null);
-    const [startedonce, setstartedonce] = useState(false)
+  const [iframeSrc, setIframeSrc] = useState(null);
+  const [loadingStatus, setLoadingStatus] = useState("Initializing...");
+  const installStartedRef = useRef(false);
+  const serverStartedRef = useRef(false);
 
+  useEffect(() => {
+    if (!ws || !file) return;
 
+    const startContainer = async (files) => {
+      try {
+        setLoadingStatus("Mounting files...");
+        await ws.mount(files);
+        console.log("✓ Files mounted");
 
-    useEffect(() => {
-        if (!ws || !file) return;
-
-        let runningProcess = null;
-
-        const startContainer = async (files) => {
-            await ws.mount(files);
-
-            console.log("reached startcontainer")
-
-            if(!startedonce){
-                const installProcess = await ws.spawn("npm", ["install"]);
-                await installProcess.exit;
+        // Only install once per session
+        if (!installStartedRef.current) {
+          installStartedRef.current = true;
+          setLoadingStatus("Installing dependencies (this happens once)...");
+          
+          const installProcess = await ws.spawn("npm", ["install"]);
+          
+          // Show progress by monitoring output
+          installProcess.output.pipeTo(new WritableStream({
+            write(data) {
+              console.log(data);
             }
-            await ws.spawn("npm", ["run", "dev"]);
-            ws.on("server-ready", (port, url) => {
-                console.log("Next.js dev server running at:", url);
-                setIframeSrc(url);
-            });
-            setstartedonce(true)
-        };
+          }));
 
-        const filesTree = transformPostCodeResponse(file);
-        startContainer(filesTree);
-    }, [file]);
+          const installExitCode = await installProcess.exit;
+          
+          if (installExitCode !== 0) {
+            console.error("npm install failed");
+            setLoadingStatus("Installation failed. Please refresh.");
+            return;
+          }
+          console.log("✓ Dependencies installed");
+        } else {
+          console.log("✓ Using cached dependencies");
+        }
 
-    return (
-        <div style={{ flex: 1 }}>
-            {iframeSrc ? (
-                <iframe
-                    src={iframeSrc}
-                    style={{ width: "100%", height: "830px", border: "none" }}
-                    title="Next.js Preview"
-                />
-            ) : (
-                <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-slate-950 to-black text-white">
-                    <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-white mb-6"></div>
-                    <h2 className="text-2xl font-semibold">Loading Next.js app inside WebContainer...</h2>
-                    <p className="mt-2 text-gray-400">This may take a few min ⏳</p>
-                </div>
-            )}
+        // Start server only if not already running
+        if (!serverStartedRef.current) {
+          serverStartedRef.current = true;
+          setLoadingStatus("Starting dev server...");
+          
+          const devProcess = await ws.spawn("npm", ["run", "dev"]);
+          
+          // Monitor server output
+          devProcess.output.pipeTo(new WritableStream({
+            write(data) {
+              console.log(data);
+            }
+          }));
+        }
+        
+        // Listen for server ready
+        ws.on("server-ready", (port, url) => {
+          console.log("✓ Server ready at:", url);
+          setLoadingStatus("Ready!");
+          setIframeSrc(url);
+        });
+
+      } catch (error) {
+        console.error("Error:", error);
+        setLoadingStatus("Error loading container. Please refresh.");
+      }
+    };
+
+    const filesTree = transformPostCodeResponse(file);
+    startContainer(filesTree);
+
+  }, [file, ws]);
+
+  return (
+    <div className="w-full h-full">
+      {iframeSrc ? (
+        <iframe
+          src={iframeSrc}
+          className="w-full h-full border-none"
+          title="Next.js Preview"
+          sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals"
+        />
+      ) : (
+        <div className="flex flex-col items-center justify-center h-full bg-gradient-to-b from-slate-950 to-black text-white">
+          <div className="relative mb-8">
+            <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-500"></div>
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+              <div className="w-8 h-8 bg-blue-500 rounded-full animate-pulse"></div>
+            </div>
+          </div>
+          <h2 className="text-2xl font-semibold mb-2">{loadingStatus}</h2>
+          <p className="mt-2 text-gray-400 text-center max-w-md">
+            {installStartedRef.current 
+              ? "Almost there! The server is starting up..." 
+              : "First load takes longer. Subsequent loads will be instant! ⚡"}
+          </p>
+          <div className="mt-6 flex gap-2">
+            <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+            <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+            <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+          </div>
         </div>
-    );
+      )}
+    </div>
+  );
 };

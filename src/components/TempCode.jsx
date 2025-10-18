@@ -5,6 +5,7 @@ import susLogo from '../assets/sus.svg';
 import { useNavigate } from "react-router-dom";
 import { motion } from 'framer-motion';
 import Code from './Code';
+import { preBootWebContainer } from './webContainerService';
 
 export const TempCode = () => {
   const navigate = useNavigate();
@@ -15,14 +16,11 @@ export const TempCode = () => {
   const [sending, setSending] = useState(false);
   const [loading, setloading] = useState(true);
   const [limit, setlimit] = useState(0);
-
   const handleSubmit = (e) => {
-    e.preventDefault();
     setSending(true);
     setlimit((prev) => (prev > 0 ? prev - 1 : 0));
     setpage("code");
   }
-
   const GetUser = async () => {
     const token = localStorage.getItem("Authorization");
     if (!token) return { status: "fail" };
