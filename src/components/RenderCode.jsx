@@ -11,8 +11,19 @@ function transformPostCodeResponse(data) {
   }
 
   for (const [filename, contents] of Object.entries(data?.backendCode ?? {})) {
-    const normalized = filename.replace(/\//g, '');
-    api[normalized] = { file: { contents } };
+    // Split the path and build nested structure
+    const parts = filename.split('/').filter(Boolean);
+    let current = api;
+    
+    for (let i = 0; i < parts.length - 1; i++) {
+      if (!current[parts[i]]) {
+        current[parts[i]] = { directory: {} };
+      }
+      current = current[parts[i]].directory;
+    }
+    
+    const fileName = parts[parts.length - 1];
+    current[fileName] = { file: { contents } };
   }
 
   return {
