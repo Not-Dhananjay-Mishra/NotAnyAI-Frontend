@@ -7,12 +7,13 @@ function Hero() {
 
   const GetUser = async () => {
     try {
+      const token = localStorage.getItem("Authorization");
       const res = await fetch("https://notanyai-backend.onrender.com/validate", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `${token}`,
         },
-        credentials: "include", // ✅ send cookies automatically
       });
 
       if (!res.ok) return { status: "fail" };
