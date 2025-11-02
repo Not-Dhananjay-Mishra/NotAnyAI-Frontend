@@ -273,11 +273,11 @@ const Code = ({ queryHome }) => {
               {(think.length > 0 || genstart.length > 0 || gencomplete.length > 0 || processing.length > 0) && (
                 <div className='flex flex-col justify-start gap-2'>
                   {think.length > 0 && (
-                    <div className='border rounded-xl p-3 w-fit border-gray-700 text-sm text-white bg-gray-900'>
-                      {think.map((ele, idx) => (
+                      think.map((ele, idx) => (
+                        <div className='border rounded-xl p-3 w-fit border-gray-700 text-sm text-white bg-gray-900'>
                         <p key={idx}>{ele}</p>
-                      ))}
-                    </div>
+                        </div>
+                      ))
                   )}
 
                   {genstart.length > 0 && (
