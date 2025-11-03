@@ -191,7 +191,7 @@ export const RenderCode = ({ file, ws }) => {
           sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals"
         />
       ) : (
-        <div className="flex flex-col items-center justify-center h-full bg-gradient-to-b from-slate-950 to-black text-white">
+        <div className="flex flex-col items-center justify-center h-full bg-[#161616] text-white">
           <div className="relative mb-8">
             <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-500"></div>
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">

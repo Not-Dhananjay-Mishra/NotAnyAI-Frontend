@@ -4,6 +4,7 @@ import useWebSocket from 'react-use-websocket';
 import susLogo from '../assets/sus.svg';
 import { useNavigate } from "react-router-dom";
 import { h1 } from 'motion/react-client';
+import { MapPin, ArrowUpRight } from 'lucide-react'
 
 function App() {
   const token = localStorage.getItem("Authorization");
@@ -98,28 +99,29 @@ function App() {
   return (
     <>
       {loading && (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-slate-950 to-black text-white">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-[#161616] text-white">
           <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-white mb-6"></div>
           <h2 className="text-2xl font-semibold">Loading...</h2>
         </div>
       )}
 
       {!loading && (<div className='flex flex-row h-[100dvh] overflow-hidden relative '>
-        <div className='bg-green-700 hidden md:block  md:w-1/6 bg-gradient-to-b from-slate-950 to-black'>
-          <div className='bg-gradient-to-b from-slate-950 to-black p-6 rounded-b-xl flex items-center gap-3'>
+        <div className='hidden md:block  md:w-1/6 bg-[#0c0c0c]'>
+          <div className='bg-[#161616] p-6 rounded-b-xl flex items-center gap-3'>
             <img src={susLogo} alt="sus" height={64} width={64} />
             <div className='text-white hidden md:block'>
               <h1 className='text-xl font-bold'>NotAny AI</h1>
-              <h2>Your AI Assistant</h2>
+              <h2 className='instrument-serif-regular-italic'>Your AI Assistant</h2>
             </div>
           </div>
           <div className='mt-5 mx-4 font-bold'>
-            <button
-              className="w-full hidden md:block bg-gradient-to-r py-3 from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25 rounded-xl 
-            transform hover:scale-[1.02] transition-all duration-200" onClick={() => { navigate("/sitecraft") }}
-            >
-              SiteCraft AI
-            </button>
+        <button
+          onClick={() => navigate("/sitecraft")}
+          className="w-full hidden md:block bg-white text-black text-xl font-semibold py-3 rounded-3xl shadow-[0_4px_20px_rgba(255,255,255,0.15)] hover:shadow-[0_6px_25px_rgba(255,255,255,0.25)] hover:-translate-y-1 transition-all duration-300 ease-out"
+        >
+          SiteCraft AI
+        </button>
+
             <button
               className="w-full md:hidden bg-gradient-to-r py-3 from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25 rounded-xl transform hover:scale-[1.02] transition-all duration-200"
             >
@@ -127,9 +129,9 @@ function App() {
             </button>
           </div>
         </div>
-        <div className='bg-red-500 flex-1 bg-gradient-to-b from-[#020d1f] via-black to-[#020d1f] text-white '>
+        <div className=' flex-1 bg-[#161616] text-white '>
           <div className='flex flex-col h-full'>
-            <div className=' bg-gradient-to-b from-[#020d1f] to-[#020c1d] px-8 py-5 flex justify-between'>
+            <div className=' bg-[#161616] px-8 py-5 flex justify-between'>
                 <button onClick={() => navigate("/")}>
                   <div className='flex gap-2 items-center'>
                     <img src={susLogo} alt="sus" height={32} width={32} />
@@ -143,15 +145,15 @@ function App() {
               <div className='flex flex-col justify-centre '>
                 {CurrMsg === "" && Msg === "" && (
                   <div className='flex flex-col justify-center items-center text-center mt-32'>
-                    <h1 className='text-4xl md:text-6xl font-bold mb-1'>Welcome Back!</h1>
-                    <h1 className="text-xl md:text-3xl text-blue-400 mb-2">{username} <span className="text-xl text-white">ready to explore AI today?</span></h1>
+                    <h1 className='text-4xl md:text-7xl mb-1 font-instrument '>Welcome Back!</h1>
+                    <h1 className="text-xl md:text-3xl text-blue-400 mb-2 ">{username} <span className="text-xl text-white">ready to explore AI today?</span></h1>
                     <h2 className="text-lg font-bold text-white mb-1 tracking-tight">
-                      Looks like you haven't tried <span className="text-blue-400"> Sitecraft AI</span> yet
+                      Looks like you haven't tried <span className="text-blue-400 instrument-serif-regular-italic"> Sitecraft AI</span> yet
                     </h2>
                     <p className='text-[12px] text-center mb-4'>Use Desktop for better experience</p>
                     <button
                       onClick={() => { navigate("/sitecraft") }}
-                      className="bg-gradient-to-r from-blue-600 to-blue-800 px-5 py-2 rounded-full text-sm font-medium text-white shadow-md hover:scale-105 hover:shadow-lg transition-all duration-300">
+                      className="bg-white px-5 py-2 rounded-full text-sm font-medium text-black shadow-md hover:scale-105 hover:shadow-lg transition-all duration-300">
                       <div>
                         <h1>Try Sitecraft AI</h1>
                       </div>
@@ -197,7 +199,7 @@ function App() {
 
             <div className="p-4 border-t border-slate-700 flex flex-shrink-0 gap-2 justify-center items-center">
               <div className='w-3/4  overflow-hidden '>
-                <div className='max-h-16 rounded-t-xl bg-slate-900 p-2 flex items-start justify-start'>
+                <div className='max-h-16 rounded-t-xl bg-[#111111] p-2 flex items-start justify-start'>
                   {file && (
                     <div className="flex items-center gap-2">
                       <img
@@ -210,7 +212,7 @@ function App() {
                   )}
                 </div>
                 <input onKeyDown={(e) => { if (e.key == "Enter") handleSend() }} value={inp} onChange={(e) => { Useinp(e.target.value) }}
-                  type="text" className='border-none bg-slate-900 max-w-full w-full p-4 rounded-b-xl hover:border-white/40 outline-none focus:outline-none'
+                  type="text" className='border-none bg-[#111111] max-w-full w-full p-4 rounded-b-xl hover:border-white/40 outline-none focus:outline-none'
                   placeholder='Enter your prompt' />
               </div>
               <div>
@@ -224,7 +226,7 @@ function App() {
                   className="w-10 h-10 hidden items-center justify-center rounded-full hover:bg-slate-600 cursor-pointer transition-colors" />
                 <label
                   htmlFor="fileInput"
-                  className="px-3 py-3 flex items-center bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-purple-700 justify-center rounded-full hover:bg-slate-600 cursor-pointer transition-colors"
+                  className="px-3 py-3 flex items-center bg-white hover:bg-gray-200 justify-center rounded-full cursor-pointer transition-colors"
                 >
                   {/* Camera Icon */}
                   <svg
@@ -233,14 +235,16 @@ function App() {
                     viewBox="0 0 24 24"
                     strokeWidth="2"
                     stroke="currentColor"
-                    className="w-6 h-6  text-white"
+                    className="w-6 h-6  text-black"
                   >
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 7h3l2-3h8l2 3h3v13H3V7z" />
                     <circle cx="12" cy="13" r="4" />
                   </svg>
                 </label>
               </div>
-              <div><button onClick={handleSend} className=' bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-purple-700 px-4 py-3 rounded-full hover:scale-90'>→</button></div>
+              <div><button onClick={handleSend} className='bg-white hover:bg-gray-200 px-3 py-3 rounded-full text-black'>
+                <ArrowUpRight className="text-black" />
+                </button></div>
             </div>
           </div>
         </div>

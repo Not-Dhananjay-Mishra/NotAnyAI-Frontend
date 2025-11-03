@@ -37,7 +37,7 @@ const ShowCode = ({ file }) => {
   return (
     <div className="flex flex-row h-full">
       {/* Sidebar filenames */}
-      <div className="w-1/6 p-4 overflow-y-auto border-r border-gray-700 bg-slate-950">
+      <div className="w-1/6 p-4 overflow-y-auto border-r border-gray-700 bg-[#161616]">
         <div className="mb-4">
           <h3 className="text-xs font-semibold text-gray-400 mb-2 uppercase">Frontend</h3>
           {Object.entries(page).map(([filename, obj], idx) => (
@@ -70,8 +70,8 @@ const ShowCode = ({ file }) => {
       </div>
 
       {/* Code viewer */}
-      <div className="flex-1 bg-gray-900 p-4 overflow-auto">
-        <h1 className="pb-4 text-2xl font-bold text-white">Code Preview</h1>
+      <div className="flex-1 bg-[#252525] p-4 overflow-auto">
+        <h1 className="pb-4 text-2xl font-bold text-white pl-2">Code Preview</h1>
         {currCode ? (
           <pre className="text-left text-sm text-green-300 whitespace-pre-wrap bg-black p-4 rounded-lg overflow-x-auto">
             <code>{currCode}</code>

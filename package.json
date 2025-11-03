@@ -12,6 +12,7 @@
   "dependencies": {
     "@codesandbox/sandpack-react": "^2.20.0",
     "@webcontainer/api": "^1.6.1",
+    "lucide-react": "^0.552.0",
     "motion": "^12.23.12",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",

@@ -29,7 +29,7 @@ import React from 'react';
 
 const Hero = () => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-slate-950 to-black text-white p-4">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-[#161616] text-white p-4">
       <h1 className="text-5xl md:text-6xl font-extrabold text-center mb-4 leading-tight">
         SiteCraft AI by NotAnyAI
       </h1>
@@ -55,7 +55,7 @@ import Loading from './Loading.jsx';
 
 function App({ isLoading }) {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 to-black text-white">
+    <div className="min-h-screen bg-[#161616] text-white">
       <Loading />
     </div>
   );
@@ -68,7 +68,7 @@ export default App;`
 
 const Loading = () => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-slate-950 to-black text-white">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-[#161616] text-white">
       <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-white mb-6"></div>
       <h2 className="text-2xl font-semibold">Building your project...</h2>
       <p className="mt-2 text-gray-400">This may take a few seconds ⏳</p>
@@ -216,7 +216,7 @@ const Code = ({ queryHome }) => {
   const sandboxFiles = Object.keys(files).length ? files : defaultfiles;
 
   return (
-    <div className='bg-gradient-to-b from-slate-950 to-black min-h-screen flex flex-col text-white'>
+    <div className='bg-[#161616] min-h-screen flex flex-col text-white'>
       <div className='flex justify-between p-4'>
         <button onClick={() => navigate("/app")} className='flex gap-2 items-center hover:scale-105 duration-300'>
           <div className='flex gap-2 items-center'>
@@ -250,7 +250,7 @@ const Code = ({ queryHome }) => {
 
       <div className="flex flex-col md:flex-row flex-1 overflow-hidden p-3">
         {/* Left panel - Chat */}
-        <div className="md:w-1/5 bg-gradient-to-b from-slate-950 to-black rounded-2xl flex flex-col p-3 overflow-y-hidden">
+        <div className="md:w-1/5 bg-[#111111] rounded-2xl flex flex-col p-3 overflow-y-hidden">
           <div className="flex-1 text-white overflow-y-auto scrollbar-hide">
             <div className='flex flex-col gap-2 overflow-y-auto scrollbar-hide'>
               {lastquery === "" && (
@@ -309,12 +309,12 @@ const Code = ({ queryHome }) => {
           </div>
 
           {/* Input section */}
-          <div className='flex flex-col items-center gap-4 bg-slate-900 px-4 py-4 max-w-3xl mx-auto rounded-3xl w-full'>
+          <div className='flex flex-col items-center gap-4 bg-[#252525] px-4 py-4 max-w-3xl mx-auto rounded-3xl w-full'>
             <input 
               type="text" 
               name="prompt" 
               id="prompt" 
-              className='w-full h-12 p-3 rounded-3xl text-white bg-slate-800'
+              className='w-full h-12 p-3 rounded-3xl text-white bg-[#111111]'
               autoComplete="off" 
               value={query} 
               onChange={(e) => setQuery(e.target.value)} 
@@ -324,7 +324,7 @@ const Code = ({ queryHome }) => {
             <div className='flex justify-between items-center w-full'>
               <div className='flex gap-3 items-center justify-end'>
                 <button 
-                  className='bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-3 rounded-3xl text-white font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 disabled:opacity-50'
+                  className='bg-white px-6 py-3 rounded-3xl text-black font-semibold hover:bg-gray-200 transition-all duration-300 disabled:opacity-50'
                   onClick={() => handleSubmit()} 
                   disabled={sending}
                 >
@@ -344,7 +344,7 @@ const Code = ({ queryHome }) => {
                 />
                 <label
                   htmlFor="fileInput"
-                  className="px-3 py-3 flex items-center bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 justify-center rounded-full cursor-pointer transition-colors"
+                  className="px-3 py-3 flex items-center bg-white text-black justify-center rounded-full cursor-pointer transition-colors"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -352,7 +352,7 @@ const Code = ({ queryHome }) => {
                     viewBox="0 0 24 24"
                     strokeWidth="2"
                     stroke="currentColor"
-                    className="w-6 h-6 text-white"
+                    className="w-6 h-6 text-black"
                   >
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 7h3l2-3h8l2 3h3v13H3V7z" />
                     <circle cx="12" cy="13" r="4" />
@@ -374,7 +374,7 @@ const Code = ({ queryHome }) => {
         </div>
 
         {/* Right panel - Preview/Code */}
-        <div className="md:w-4/5 bg-gradient-to-b from-slate-950 to-black rounded-2xl md:ml-3 text-white">
+        <div className="md:w-4/5 bg-[#111111] rounded-2xl md:ml-3 text-white">
           <div className="flex-1 bg-slate-900 rounded-2xl m-3 overflow-hidden h-[830px]">
             {gotmsg && view === "Preview" && (
               <RenderCode file={files} ws={webcontainerInstance} />
@@ -385,7 +385,7 @@ const Code = ({ queryHome }) => {
             )}
 
             {!gotmsg && (
-              <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-slate-950 to-black text-white">
+              <div className="flex flex-col items-center justify-center min-h-screen bg-[#161616] text-white">
                 <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-white mb-6"></div>
                 <h2 className="text-2xl font-semibold">Building your project...</h2>
                 <p className="mt-2 text-gray-400">This may take a few seconds ⏳</p>
