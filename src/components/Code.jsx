@@ -265,7 +265,7 @@ const Code = ({ queryHome }) => {
               )}
               
               {lastquery && (
-                <div className='border rounded-xl p-3 w-fit border-gray-700 text-sm text-white bg-gradient-to-br from-blue-500 to-blue-600 self-end'>
+                <div className='border rounded-xl p-3 w-fit border-gray-700 text-sm text-black bg-[#e6e6e6] self-end'>
                   {lastquery}
                 </div>
               )}
@@ -274,7 +274,7 @@ const Code = ({ queryHome }) => {
                 <div className='flex flex-col justify-start gap-2'>
                   {think.length > 0 && (
                       think.map((ele, idx) => (
-                        <div className='border rounded-xl p-3 w-fit border-gray-700 text-sm text-white bg-gray-900'>
+                        <div className='border rounded-xl p-3 w-fit border-gray-700 text-sm text-white bg-[#252525]'>
                         <p key={idx}>{ele}</p>
                         </div>
                       ))
