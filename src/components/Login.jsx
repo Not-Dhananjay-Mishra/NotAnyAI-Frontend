@@ -34,7 +34,7 @@ const Login = () => {
     setStatus(stat.status);
 
     if (stat.status === "done") {
-      etStatus("Login Done Redirecting...");
+      setStatus("Login Done Redirecting...");
       window.location.href = "/app"; // Redirect after successful login
       localStorage.setItem("Authorization", stat.token);
     } else {
