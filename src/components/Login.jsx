@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from 'react'
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -7,6 +7,7 @@ const Login = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState("");
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   // Call backend login
   const LoginAPI = async (formData) => {
@@ -19,7 +20,13 @@ const Login = () => {
     });
     return res.json();
   };
-
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
   const handleManualSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -27,10 +34,11 @@ const Login = () => {
     setStatus(stat.status);
 
     if (stat.status === "done") {
-      console.log("Login successful via cookie");
+      etStatus("Login Done Redirecting...");
       window.location.href = "/app"; // Redirect after successful login
       localStorage.setItem("Authorization", stat.token);
     } else {
+      setStatus("Login failed Please enter valid crediantials");
       console.log("Login failed");
     }
     setIsSubmitting(false);
@@ -42,69 +50,81 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-b from-blue-50 to-blue-200 text-white text-center px-4 relative overflow-hidden font-sans">
-      <div className="relative p-8 rounded-3xl bg-gradient-to-r from-white/70 to-blue-50 backdrop-blur-xl border border-blue-100 shadow-2xl hover:shadow-3xl transition-all duration-300">
+    <div className="min-h-screen flex flex-col justify-center items-center bg-[#161616] text-white text-center px-4 relative overflow-hidden font-sans">
+          {status && (
+            <div className='absolute z-50 left-10 bottom-10'>
+              <p className="mt-4 text-center text-sm text-black bg-white px-4 py-3 rounded-xl transition-all duration-300 ease-in">{status}</p>
+            </div>
+          )}
+      {/* Animated background gradient */}
+      <div 
+        className="absolute inset-0 opacity-30 pointer-events-none"
+        style={{
+          background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(59, 130, 246, 0.15), transparent 40%)`
+        }}
+      />
+
+      {/* Floating particles effect */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(20)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-1 h-1 bg-blue-400/30 rounded-full animate-pulse"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 3}s`,
+              animationDuration: `${2 + Math.random() * 3}s`
+            }}
+          />
+        ))}
+      </div>
+
+      <div className="relative p-8 rounded-3xl bg-[#222222] backdrop-blur-xl shadow-2xl hover:shadow-3xl transition-all duration-300">
         <div className="flex justify-center items-center mb-2">
-          <span className="text-blue-500 text-5xl font-bold">sus</span>
+        <h1 className="text-3xl md:text-6xl font-instrument font-extrabold bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent drop-shadow-lg animate-gradient bg-[length:200%_auto]">
+          NotAnyAI
+        </h1>
         </div>
-        <div className="space-y-2">
-          <h1 className="text-3xl text-gray-800">Welcome back</h1>
-          <p className="text-gray-600">Sign in to your NotAny AI account</p>
+        <div className="space-y-2 mb-8">
+          <h1 className="text-2xl text-white">Welcome back</h1>
+          <p className="text-white">Sign in to your NotAnyAI account</p>
         </div>
 
         <form onSubmit={handleManualSubmit}>
-          <h1 className="mt-6 mb-6 text-gray-700">(Beta User ONLY)</h1>
           <input
             type="text"
             placeholder="Username"
             value={formData.username}
+            autoComplete="off"
             onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-            className="w-full p-3 mb-4 rounded-xl bg-white/50 border border-gray-200 focus:border-blue-300 focus:ring-blue-300/20 text-gray-700 hover:border-gray-400 duration-150 outline-none"
+            className="w-full p-3 mb-4 rounded-2xl bg-[#333333] text-white duration-150 outline-none"
           />
           <input
             type="password"
             placeholder="Password"
+            autoComplete="off"
             value={formData.password}
             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-            className="w-full p-3 mb-4 rounded-xl bg-white/50 border border-gray-200 focus:border-blue-300 focus:ring-blue-300/20 text-gray-700 hover:border-gray-400 duration-150 outline-none"
+            className="w-full p-3 mb-4 rounded-2xl bg-[#333333] text-white duration-150 outline-none"
           />
           <div className="flex items-center justify-between mb-10">
             <label className="flex items-center space-x-2 cursor-pointer">
               <input type="checkbox" className="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
-              <span className="text-sm text-gray-600">Remember me</span>
+              <span className="text-sm text-white">Remember me</span>
             </label>
           </div>
           <input
             type="submit"
-            value={isSubmitting ? "Submitting..." : "Login"}
+            value={isSubmitting ? "Loading..." : "Login"}
             disabled={isSubmitting}
-            className="w-full py-3 rounded-2xl bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25 transform hover:scale-[1.02] transition-all duration-200 font-medium cursor-pointer"
+            className="bg-white text-black px-8 py-3 mx-auto rounded-xl font-semibold text-lg hover:shadow-2xl hover:shadow-white/20 hover:bg-gray-100 transition-all duration-300 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           />
-          {status && (
-            <p className="mt-4 text-center text-sm text-gray-400">{status}</p>
-          )}
         </form>
 
         <div className="relative my-6">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-300"></div>
-          </div>
-          <div className="relative flex justify-center text-sm">
-            <span className="bg-white/70 px-2 text-gray-500">Or continue with</span>
-          </div>
         </div>
 
-        <button
-          onClick={handleGoogleLogin}
-          className="w-full py-3 rounded-2xl bg-white hover:bg-gray-100 text-gray-700 shadow-md transform hover:scale-[1.02] transition-all duration-200 flex items-center justify-center space-x-2 font-medium border border-gray-300"
-        >
-          <img
-            src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-            alt="Google logo"
-            className="w-5 h-5"
-          />
-          <span>Sign in with Google</span>
-        </button>
       </div>
     </div>
   );
