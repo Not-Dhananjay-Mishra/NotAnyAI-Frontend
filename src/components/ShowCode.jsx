@@ -1,15 +1,19 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 
 const ShowCode = ({ file }) => {
   const [page, setPage] = useState({});
   const [api, setApi] = useState({});
   const [currCode, setCurrCode] = useState("");
+  const [jsonfile, setjsonfile] = useState("");
+
 
   function transformPostCodeResponse(data) {
     if (!data) return {};
 
     const pages = {};
     const apiFiles = {};
+    const jsonfile = data.jsonfile;
+    setjsonfile(jsonfile);
 
     for (const [filename, contents] of Object.entries(data?.frontendCode ?? {})) {
       pages[filename] = { file: { contents } };
@@ -50,6 +54,14 @@ const ShowCode = ({ file }) => {
               </button>
             </div>
           ))}
+          <div className="py-1">
+              <button
+                className="w-full bg-slate-800 px-3 py-2 rounded-lg text-white text-left text-sm hover:bg-slate-700 transition"
+                onClick={() => setCurrCode(jsonfile)}
+              >
+                📄 package.json
+              </button>
+          </div>
         </div>
 
         {Object.keys(api).length > 0 && (

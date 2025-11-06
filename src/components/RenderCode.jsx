@@ -5,6 +5,8 @@ function transformPostCodeResponse(data) {
 
   const pages = {};
   const api = {};
+  const jsonfile = data.jsonfile;
+  console.log(jsonfile);
 
   for (const [filename, contents] of Object.entries(data?.frontendCode ?? {})) {
     pages[filename] = { file: { contents } };
@@ -82,26 +84,7 @@ export default {
     },
     "package.json": {
       file: {
-        contents: JSON.stringify({
-          name: "webcontainer-nextjs-tailwind-app",
-          type: "module",
-          scripts: {
-            dev: "next dev",
-            build: "next build",
-            start: "next start"
-          },
-          dependencies: {
-            react: "^18.2.0",
-            "react-dom": "^18.2.0",
-            next: "^14.0.0",
-            tailwindcss: "^3.3.2",  
-            postcss: "^8.4.21",
-            autoprefixer: "^10.4.14",
-            "@react-three/fiber": "^8.15.16",
-            "@react-three/drei": "^9.101.3",
-            "framer-motion": "^11.2.6"
-          },
-        }),
+        contents: typeof jsonfile === "string" ? jsonfile : JSON.stringify(jsonfile, null, 2),
       },
     },
   };
